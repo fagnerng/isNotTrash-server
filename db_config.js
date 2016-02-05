@@ -22,6 +22,14 @@ db.once('open', function(){
     isActive: Boolean
   });
 
-  exports mongoose.model('promotions', promotionsSchema);
+  /*Esquema do Json dos usuários*/
+  var userSchema = mongoose.Schema({
+    name: String,
+    email: String,
+    password: String
+  });
+
+  exports.User = mongoose.model('User', userSchema);
+  exports.promotions = mongoose.model('promotions', promotionsSchema);
 
 });
