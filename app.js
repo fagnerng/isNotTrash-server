@@ -7,7 +7,12 @@ var users = require('./routes/user.js');
 var app = express();
 
 /*Serviço rodando na porta 1337*/
-app.listen(1337);
+var port = process.env.PORT || 1337;
+var ip = process.env.IP || 'localhost';
+
+app.listen(port, function() {
+    console.log('App is running on http://' + ip + ':' + port);
+});
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
