@@ -2,18 +2,6 @@ var express = require('express');
 var router = express.Router();
 var db = require('../db_config');
 
-router.use('/',function(req, res, next) {
-  //if (req.method == "GET") {
-  //  db.User.where("this.end <= new Date()").update({'isActive': false}, function (error) {
-  //    if (error) {
-  //      res.json({error: 'Erro no banco de dados'});
-  //    } else {
-  //      console.log('Promoções atualizadas');
-  //    }
-  //  });
-  //}
-  next();
-});
 
 /*Rota que retorna todas as promoções do Banco de dados*/
 router.get('/', function(req, res){
