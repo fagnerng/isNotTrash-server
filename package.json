@@ -18,11 +18,11 @@
   },
   "homepage": "https://github.com/BrunoRafael/isNotTrash-server#readme",
   "dependencies": {
-    "body-parser": "^1.14.2",
-    "express": "^4.13.4",
-    "mongoose": "^4.2.4",
-    "morgan": "^1.6.1",
-    "validator": "^4.6.1"
+    "body-parser": "1.14.2",
+    "express": "4.13.4",
+    "mongoose": "4.2.4",
+    "morgan": "1.6.1",
+    "validator": "4.6.1"
   },
   "engines": {
     "node": "4.2.2"
