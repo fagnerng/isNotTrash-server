@@ -7,7 +7,7 @@ var db = require('../db_config');
 router.get('/', function(req, res){
   db.promotions.find({isActive: true}, function(error, promotions){
     if(error){
-      res.json({eror: 'Não foi possível encontrar promoções'});
+      res.json({error: 'Não foi possível encontrar promoções'});
     }else{
       res.json(promotions);
     }
@@ -15,16 +15,32 @@ router.get('/', function(req, res){
 });
 
 /*Rota que retorna as promoções ativas que tem a menor duração*/
-router.get('/shorter', function(req, res){
+router.get('/sortByExpiration', function(req, res){
 
-  /*Valor das durações asc e limitado por 5 documentos*/
+  /*Valor das durações asc*/
   var newestPromotions = db.promotions.find({isActive: true}).sort({'duration': 1}).limit(5);
 
   newestPromotions.exec(function(error, promotions){
     if(error){
-      res.json({eror: 'Não foi possível novas promoçoes'});
+      res.json({error: 'Não foi possível novas promoçoes'});
     }else{
       res.json(promotions);
+    }
+  });
+});
+
+router.get('/:id', function(req, res){
+
+  var id = req.params.id;
+
+  console.log(id);
+
+  db.promotions.findOne({_id:id}, function(error, promotion){
+
+    if(error){
+      res.json({error: 'Não foi possível encontrar a promocao'});
+    }else{
+      res.json(promotion);
     }
   });
 });
