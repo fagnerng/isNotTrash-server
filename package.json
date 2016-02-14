@@ -22,9 +22,14 @@
     "express": "4.13.4",
     "mongoose": "4.2.4",
     "morgan": "1.6.1",
+    "mquery": "^1.6.3",
     "validator": "4.6.1"
   },
   "engines": {
     "node": "4.2.2"
+  },
+  "devDependencies": {
+    "chai": "^3.5.0",
+    "mocha": "^2.4.5"
   }
 }
