@@ -11,6 +11,13 @@ router.get('/', function(req, res){
     });
 });
 
+/*Implementa método GET para recuperar todas as promoções*/
+router.get('/all', function(req, res){
+    promotionController.all(function(resp) {
+        res.json(resp);
+    });
+});
+
 /*Implementa algoritmo de ordenação dos produtos (por tempo de duração)*/
 router.get('/sortByExpiration', function(req, res){
   promotionController.listByExpiration(function(resp) {
