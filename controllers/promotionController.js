@@ -15,7 +15,6 @@ exports.all = function(callback){
 		if (err) {
 			callback({error: 'Não foi possível encontrar promoções'});
 		} else {
-			console.log(promotions)
 			callback(promotions);
 		}
 	});
