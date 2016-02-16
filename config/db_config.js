@@ -26,7 +26,8 @@ db.once('open', function(){
   var userSchema = mongoose.Schema({
     name: String,
     email: String,
-    password: String
+    password: String,
+    phone: String
   });
 
   exports.User = mongoose.model('User', userSchema);

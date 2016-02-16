@@ -25,8 +25,9 @@ router.post('/', function(req, res) {
     var name = validator.trim(validator.escape(req.param('name')));
     var email = validator.trim(validator.escape(req.param('email')));
     var password = validator.trim(validator.escape(req.param('password')));
+    var phone = validator.trim(validator.escape(req.param('phone')));
 
-    userController.save(name, email, password, function(resp) {
+    userController.save(name, email, password,phone, function(resp) {
         res.json(resp);
     });
 });
@@ -37,7 +38,8 @@ router.put('/', function(req, res) {
     var name = validator.trim(validator.escape(req.param('name')));
     var email = validator.trim(validator.escape(req.param('email')));
     var password = validator.trim(validator.escape(req.param('password')));
-    userController.update(id, name, email, password, function(resp) {
+    var phone = validator.trim(validator.escape(req.param('phone')));
+    userController.update(id, name, email, password,phone, function(resp) {
         res.json(resp);
     });
 });

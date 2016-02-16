@@ -21,11 +21,12 @@ exports.user = function(id, callback) {
     });
 };
 
-exports.save = function(name, email, password, callback){
+exports.save = function(name, email, password, phone, callback){
     new db.User({
         'name': name,
         'email': email,
         'password': password,
+        'phone': phone
     }).save(function(error, user) {
         if(error) {
             callback({error: 'Não foi possivel salvar o usuario'});
@@ -36,7 +37,7 @@ exports.save = function(name, email, password, callback){
 };
 
 /*id eh necessario?*/
-exports.update = function(id, name, email, password, callback) {
+exports.update = function(id, name, email, password, phone, callback) {
     db.User.findById(id, function(error, user) {
         if(error) {
             callback({error: 'Não foi possivel atualizar o usuario'});
@@ -49,6 +50,9 @@ exports.update = function(id, name, email, password, callback) {
             }
             if (password) {
                 user.password = password;
+            }
+            if (phone) {
+                user.phone = phone;
             }
             user.save(function (error, user) {
                 if (error) {
