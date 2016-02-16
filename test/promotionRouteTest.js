@@ -2,6 +2,7 @@ var request = require('superagent')
 var chai = require('chai');
 var expect = chai.expect;
 
+//@FIXME: dar um jeito de mockar o servidor e criar um banco de dados exclusivo para testes
 describe('Testes das rotas do servidor referente às promoções.', function(){
 	var dataAtual = new Date();
 	var id = '56c37b6be4b078d2f8e93a14'
