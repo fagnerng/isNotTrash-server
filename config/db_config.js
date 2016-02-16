@@ -13,13 +13,15 @@ db.once('open', function(){
     name: String,
     company: String,
     value: String,
-    duration: String,
+    old_value: String,
+    discount: String,
     start: Date,
     end: Date,
     reason: String,
     shelf_life: Date,
     conservation: String,
-    isActive: Boolean
+    image_url: [String],
+    likes: Number
   });
 
   /*Esquema do Json dos usuários*/

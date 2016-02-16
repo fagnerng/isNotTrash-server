@@ -44,7 +44,7 @@ exports.promotion = function(id, callback){
 };
 
 exports.listByPage = function(skip, limit, callback){
-	var promotions = db.promotions.find({isActive: true}).sort({'duration': 1, 'start': 1}).skip(skip).limit(limit);
+	var promotions = db.promotions.find({"$where": 'new Date(this.end) > new Date()'}).sort({'start': 1, 'end': 1}).skip(skip).limit(limit);
 	
   	promotions.exec(function(error, promotions){
    		if(error){
@@ -53,4 +53,17 @@ exports.listByPage = function(skip, limit, callback){
     		callback(promotions);
     	}
   	});
+};
+
+exports.listNewPromotions = function(first, callback){
+	var promotions = db.promotions.find({"$where": 'new Date(this.end) > new Date()'}).sort({'start': 1, 'end': 1}).where('_id').gt(first);
+
+	promotions.exec(function(error, promotions){
+		if(error){
+			res.json({error: 'Não foi possível novas promoçoes'});
+			console.log(error);
+		}else{
+			res.json(promotions);
+		}
+	});
 };
