@@ -46,4 +46,13 @@ router.get('/pagination/:skip/:limit', function(req, res){
   });
 });
 
+/*Implementa serviço de requisição de produtos por página e por tamanho de página.*/
+router.get('/updateTimeLine/:first', function(req, res){
+    var first = validator.trim(validator.escape(req.params.first));
+
+    promotionController.listNewPromotions(first, function(resp) {
+        res.json(resp);
+    });
+});
+
 module.exports = router;
