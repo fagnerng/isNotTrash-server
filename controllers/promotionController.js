@@ -3,9 +3,9 @@ var db = require('../config/db_config');
 exports.list = function(callback){
 	db.promotions.find({"$where": 'new Date(this.end) > new Date()'},function(err, promotions){
 		if (err) {
-			res.json({error: 'Não foi possível encontrar promoções'});
+			callback({error: 'Não foi possível encontrar promoções'});
 		} else {
-			res.json(promotions);
+			callback(promotions);
 		}
 	});
 };
@@ -13,9 +13,9 @@ exports.list = function(callback){
 exports.all = function(callback){
 	db.promotions.find({},function(err, promotions){
 		if (err) {
-			res.json({error: 'Não foi possível encontrar promoções'});
+			callback({error: 'Não foi possível encontrar promoções'});
 		} else {
-			res.json(promotions);
+			callback(promotions);
 		}
 	});
 };
