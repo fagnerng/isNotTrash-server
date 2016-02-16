@@ -15,10 +15,10 @@ db.once('open', function(){
     value: String,
     oldValue: String,
     discount: String,
-    start: String,
-    end: String,
+    start: Date,
+    end: Date,
     reason: String,
-    shelfLife: String,
+    shelfLife: Date,
     conservation: String,
     image: [String],
     likes: Number
