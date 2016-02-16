@@ -13,14 +13,14 @@ db.once('open', function(){
     name: String,
     company: String,
     value: String,
-    old_value: String,
+    oldValue: String,
     discount: String,
     start: Date,
     end: Date,
     reason: String,
-    shelf_life: Date,
+    shelfLife: Date,
     conservation: String,
-    image_url: [String],
+    image: [String],
     likes: Number
   });
 
