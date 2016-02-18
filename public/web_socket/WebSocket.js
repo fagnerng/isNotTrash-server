@@ -5,7 +5,9 @@ var socket_io = require('socket.io');
 var io = socket_io();
 
 io.on('connection', function(socket){
-    console.log('Cliente conectado!');
+    socket.on('init', function(json){
+        console.log(json.data);
+    });
 });
 
 module.exports = io;
