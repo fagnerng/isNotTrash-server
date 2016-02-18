@@ -24,6 +24,7 @@
     "mongoose": "4.2.4",
     "morgan": "1.6.1",
     "mquery": "^1.6.3",
+    "socket.io": "^1.4.5",
     "validator": "4.6.1"
   },
   "engines": {
