@@ -66,7 +66,7 @@ exports.listNewPromotions = function(first, callback){
 
 	//var query = 'this._id > ' + first;
 	var objectId = mongoose.Types.ObjectId(first);
-	var promotions = db.promotions.find({_id: {$gt: objectId}}).sort({_id :-1});
+	var promotions = db.promotions.find({_id: {$gt: objectId, $ne: objectId}}).sort({_id :-1});
 
 	promotions.exec(function(error, promotions){
 		if(error){
@@ -79,7 +79,7 @@ exports.listNewPromotions = function(first, callback){
 };
 
 exports.updateTotalLikes = function(id, totalLikes){
-	var r =  db.promotions.updateOne({_id : id}, {$set: {likes : totalLikes}});
+	db.promotions.updateOne({_id : id}, {$set: {likes : totalLikes}});
 	/*function(response){
 		console.log("recomendação realizada com sucesso! " + response);
 	}*/
