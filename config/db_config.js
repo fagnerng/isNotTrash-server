@@ -1,6 +1,7 @@
-var db_string = 'mongodb://diego:diego182@ds055495.mongolab.com:55495/savefood';
+var myDb = 'mongodb://localhost:27017/test';
+//var db_string = 'mongodb://diego:diego182@ds055495.mongolab.com:55495/savefood';
 
-var mongoose = require('mongoose').connect(db_string);
+var mongoose = require('mongoose').connect(myDb);
 
 var db = mongoose.connection;
 
@@ -10,18 +11,23 @@ db.once('open', function(){
 
   /*Esquema do Json das promoçoes*/
   var promotionsSchema = mongoose.Schema({
-    name: String,
-    company: String,
-    value: String,
-    oldValue: String,
-    discount: String,
-    start: Date,
-    end: Date,
+    company:{
+      name: String,
+      subtitle: String
+    },
+    productName: String,
+    price: Number,
+    old_price: Number,
+    startDate: Number,
+    endDate: Number,
     reason: String,
-    shelfLife: Date,
+    shelf_life: Number,
     conservation: String,
-    image: [String],
-    likes: Number
+    images: [String],
+    evaluates: {
+      recomendations: Number,
+      comments: []
+    }
   });
 
   /*Esquema do Json dos usuários*/
@@ -34,5 +40,7 @@ db.once('open', function(){
 
   exports.User = mongoose.model('User', userSchema);
   exports.promotions = mongoose.model('promotions', promotionsSchema);
+
+  //var insertValues = require('');
 
 });
