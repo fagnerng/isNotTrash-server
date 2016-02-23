@@ -9,20 +9,31 @@ db.on('error', console.error.bind(console, 'Erro ao conectar no banco de dados')
 db.once('open', function(){
 
   /*Esquema do Json das promoçoes*/
-  var promotionsSchema = mongoose.Schema({
-    name: String,
-    company: String,
-    value: String,
-    old_value: String,
-    discount: String,
-    start: Date,
-    end: Date,
-    reason: String,
-    shelf_life: Date,
-    conservation: String,
-    image_url: [String],
-    likes: Number
-  });
+var promotionsSchema = mongoose.Schema({
+   company: {
+       name: String,
+       subtitle: String
+   },
+   productName: String,
+   price: Number,
+   old_price: Number,
+   startDate: Number,
+   endDate: Number,
+   reason: String,
+   shelf_life: Number,
+   conservation: String,
+   images: Array,
+   evaluates: {
+       likes: Number,
+       comments: [
+           {
+               date: Number,
+               text: String,
+               user_id: String
+           }
+       ]
+   }
+});
 
   /*Esquema do Json dos usuários*/
   var userSchema = mongoose.Schema({
