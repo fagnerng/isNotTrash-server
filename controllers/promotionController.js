@@ -46,7 +46,7 @@ exports.promotion = function(id, callback){
 
 exports.listByPage = function(skip, limit, callback){
 	var promotions = db.promotions.find({"$where": 'new Date(this.endDate) >= new Date()'}).
-	sort({'startDate': -1, 'endDate': -1}).
+	sort({_id: -1}).
 	skip(skip).
 	limit(limit);
 	
@@ -61,12 +61,8 @@ exports.listByPage = function(skip, limit, callback){
 
 exports.listNewPromotions = function(first, callback){
 
-	/*timestamp = first.toString().substring(0,8);
-	var date = new Date( parseInt( timestamp, 16 ) * 1000 );*/
-
-	//var query = 'this._id > ' + first;
 	var objectId = mongoose.Types.ObjectId(first);
-	var promotions = db.promotions.find({_id: {$gt: objectId, $ne: objectId}}).sort({_id :-1});
+	var promotions = db.promotions.find({_id: {$gt: objectId, $ne: first}}).sort({_id :-1});
 
 	promotions.exec(function(error, promotions){
 		if(error){
@@ -78,15 +74,29 @@ exports.listNewPromotions = function(first, callback){
 	});
 };
 
-exports.updateTotalLikes = function(id, totalLikes){
-	db.promotions.updateOne({_id : id}, {$set: {likes : totalLikes}});
-	/*function(response){
-		console.log("recomendação realizada com sucesso! " + response);
-	}*/
+exports.updateTotalLikes = function(id, totalLikes, callback){
+	//refatorar usando promises
+	var update = db.promotions.update(
+		{_id : id},
+		{
+			$set: {
+				"evaluates.likes": totalLikes
+			}
+		}
+	);
+	update.exec(function(error, result){
+		if(error){
+			callback({error: 'Não foi possível recomendar esse item'});
+			console.log(error);
+		}else{
+			callback(result);
+		}
+	});
 };
 
-exports.addComment = function(id, comment){
-	return db.promotions.updateOne(
+exports.addComment = function(id, comment, callback){
+	//refatorar usando promises
+	var update = db.promotions.update(
 			{
 				_id: id
 			}, {
@@ -96,4 +106,12 @@ exports.addComment = function(id, comment){
 					}
 				}
 			});
+	update.exec(function(error, result){
+		if(error){
+			callback({error: 'Não foi possível recomendar esse item'});
+			console.log(error);
+		}else{
+			callback(result);
+		}
+	});
 };

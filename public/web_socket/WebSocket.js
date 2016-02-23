@@ -16,13 +16,13 @@ io.on('connection', function(socket){
 
 /*Update the likes in the promotion*/
 function onEvaluateLikesEvent(socket){
-    socket.on('addRecomend', function(req, res){
+    socket.on('addLike', function(req, res){
         var promotionId = validator.trim(validator.escape(req.id));
-        var recomendations = validator.trim(validator.escape(req.recomendations));
-        promotionController.updateTotalLikes(promotionId, recomendations).then(
+        var likes = validator.trim(validator.escape(req.likes));
+        promotionController.updateTotalLikes(promotionId, likes,
             function(response){
                 console.log(response);
-                socket.broadcast.emit('updateRecomendations', {recomendations: recomendations});
+                socket.broadcast.emit('updateLikes', {likes: likes});
             }
         );
 
@@ -34,7 +34,7 @@ function onEvaluateCommentsEvent(socket){
     socket.on('addComment', function(req, res){
         var promotionId = validator.trim(validator.escape(req.id));
         var comment = validator.trim(validator.escape(req.comment));
-        promotionController.addComment(promotionId, comment).then(
+        promotionController.addComment(promotionId, comment,
             function(response){
                 console.log(response);
                 socket.broadcast.emit('updateRecomendations', {comment: comment});

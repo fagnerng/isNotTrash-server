@@ -18,7 +18,7 @@ var promotions =
             conservation: 'freezer',
             images: ['http://hortas.info/sites/default/files/field/image/alface001.jpg'],
             evaluates: {
-                recomendations: 25,
+                likes: 25,
                 comments: [
                     {
                         date: '2016-03-01T17:00:00',
@@ -58,7 +58,7 @@ var promotions =
             conservation: "freezer",
             images: ["http://thumbs.dreamstime.com/z/iogurtes-para-venda-35553105.jpg]"],
             evaluates: {
-                recomendations: 250,
+                likes: 250,
                     comments: []
             }
 },
@@ -77,7 +77,7 @@ var promotions =
  conservation: String,
  images: [String],
  evaluates: {
- recomendations: Number,
+ likes: Number,
  comments: []
  }
  },
@@ -96,7 +96,7 @@ var promotions =
  conservation: String,
  images: [String],
  evaluates: {
- recomendations: Number,
+ likes: Number,
  comments: []
  }
  },
@@ -115,7 +115,7 @@ var promotions =
  conservation: String,
  images: [String],
  evaluates: {
- recomendations: Number,
+ likes: Number,
  comments: []
  }
  },
@@ -134,7 +134,7 @@ var promotions =
  conservation: String,
  images: [String],
  evaluates: {
- recomendations: Number,
+ likes: Number,
  comments: []
  }
  },
@@ -153,7 +153,7 @@ var promotions =
  conservation: String,
  images: [String],
  evaluates: {
- recomendations: Number,
+ likes: Number,
  comments: []
  }
  },
@@ -172,7 +172,7 @@ var promotions =
  conservation: String,
  images: [String],
  evaluates: {
- recomendations: Number,
+ likes: Number,
  comments: []
  }
  },
@@ -191,7 +191,7 @@ var promotions =
  conservation: String,
  images: [String],
  evaluates: {
- recomendations: Number,
+ likes: Number,
  comments: []
  }
  }*/
@@ -203,7 +203,7 @@ var promotions =
 /*
 * var promotions =
  [
- {company:{ name: "Atacadão", subtitle: "Supermercado atacado e varejo" }, productName:'Alfaces', price: 2.50, old_price: 8.00, startDate: 1456066800000, endDate: 1456419600000, reason: "Danificação", shelf_life:1456851600000, conservation: 'freezer', images: ['http://hortas.info/sites/default/files/field/image/alface001.jpg'], evaluates: { recomendations: 25, comments: [ { date: 1456851600000, text: "Não gostei, os alimentos pareciam podres", user_id: '' }, { date: 1456851600000, text: "Não gostei, os alimentos pareciam podres", user_id: '' }, { date: 1456851600000, text: "Não gostei, os alimentos pareciam podres", user_id: '' }, { date: 1456851600000, text: "Não gostei, os alimentos pareciam podres", user_id: '' } ] } },
+ {company:{ name: "Atacadão", subtitle: "Supermercado atacado e varejo" }, productName:'Alfaces', price: 2.50, old_price: 8.00, startDate: 1456066800000, endDate: 1456419600000, reason: "Danificação", shelf_life:1456851600000, conservation: 'freezer', images: ['http://hortas.info/sites/default/files/field/image/alface001.jpg'], evaluates: { likes: 25, comments: [ { date: 1456851600000, text: "Não gostei, os alimentos pareciam podres", user_id: '' }, { date: 1456851600000, text: "Não gostei, os alimentos pareciam podres", user_id: '' }, { date: 1456851600000, text: "Não gostei, os alimentos pareciam podres", user_id: '' }, { date: 1456851600000, text: "Não gostei, os alimentos pareciam podres", user_id: '' } ] } },
  {
  company:{
  name: 'Maxxi',
@@ -219,13 +219,13 @@ var promotions =
  conservation: "freezer",
  images: [http://thumbs.dreamstime.com/z/iogurtes-para-venda-35553105.jpg],
  evaluates: {
- recomendations: 250,
+ likes: 250,
  comments: []
  }
  },
  /*{
- company:{name: "Amor e comanhia",subtitle: "Doceteria e lanchonete"},productName:'M&Ms de castanha e amendoin',price: 10,old_price: 15,startDate: 1456079417348,endDate: 1456252186270,reason: "validade",shelf_life: 1456684186270,conservation: "freezer",images: ["http://thumbs.dreamstime.com/z/chocolates-coloridos-do-c%C3%ADrculo-40198766.jpg"],evaluates: {recomendations: 28,comments: []}},
- {company:{name: Tiago calçados,subtitle: A últims tendência da moda},productName:'Tenis rainha',price: 82,old_price: 120,startDate: Date,endDate: Date,reason: Danificação,shelf_life: 1456114193245,conservation: 'normal',images: ["http://www.deckeronline.com.br/FILES/produtos/imagens/a10b427575427761b45c7cf5710a0e3e.jpg"],evaluates: {recomendations: 32,comments: []}},
+ company:{name: "Amor e comanhia",subtitle: "Doceteria e lanchonete"},productName:"M&Ms de castanha e amendoin",price: 10,old_price: 15,startDate: 1456079417348,endDate: 1456252186270,reason: "validade",shelf_life: 1456684186270,conservation: "freezer",images: ["http://thumbs.dreamstime.com/z/chocolates-coloridos-do-c%C3%ADrculo-40198766.jpg"],evaluates: {likes: 28,comments: []}},
+ {company:{name: "Tiago calçados",subtitle: "A últims tendência da moda"},productName:"Tenis rainha",price: 82,old_price: 120,startDate: 1456266306049,endDate: 1456439106049,reason: "Danificação",shelf_life: 1456698306049,conservation: "normal",images: ["http://www.deckeronline.com.br/FILES/produtos/imagens/a10b427575427761b45c7cf5710a0e3e.jpg"],evaluates: {likes: 32,comments: []}},
  {
  company:{
  name: String,
@@ -241,7 +241,7 @@ var promotions =
  conservation: String,
  images: [String],
  evaluates: {
- recomendations: Number,
+ likes: Number,
  comments: []
  }
  },
@@ -260,7 +260,7 @@ var promotions =
  conservation: String,
  images: [String],
  evaluates: {
- recomendations: Number,
+ likes: Number,
  comments: []
  }
  },
@@ -279,7 +279,7 @@ var promotions =
  conservation: String,
  images: [String],
  evaluates: {
- recomendations: Number,
+ likes: Number,
  comments: []
  }
  },
@@ -298,7 +298,7 @@ var promotions =
  conservation: String,
  images: [String],
  evaluates: {
- recomendations: Number,
+ likes: Number,
  comments: []
  }
  },
@@ -317,7 +317,7 @@ var promotions =
  conservation: String,
  images: [String],
  evaluates: {
- recomendations: Number,
+ likes: Number,
  comments: []
  }
  }*/

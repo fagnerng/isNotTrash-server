@@ -3,6 +3,18 @@ var logger = require('morgan');
 var bodyParser =  require('body-parser');
 
 var app = module.exports = express();
+var server = require('http').Server(app);
+var io = require('../public/web_socket/WebSocket.js');
+
+/*Serviço rodando na porta 1337*/
+var ip = process.env.IP || 'localhost';
+var port = process.env.PORT || 1337;
+
+server.listen(port, function() {
+	console.log('App is running on http://' + ip + ':' + port);
+});
+
+io.attach(server);
 
 var allowCors = function(req, res, next){
 	res.header('Access-Control-Allow-Origin', '127.0.0.1:1337');
@@ -14,14 +26,6 @@ var allowCors = function(req, res, next){
 };
 
 app.use(allowCors);
-
-/*Serviço rodando na porta 1337*/
-var ip = process.env.IP || 'localhost';
-var port = process.env.PORT || 1337;
-
-app.listen(port, function() {
-    console.log('App is running on http://' + ip + ':' + port);
-});
 
 app.use(logger('dev'));
 
