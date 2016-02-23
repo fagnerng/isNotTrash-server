@@ -33,7 +33,7 @@ function onEvaluateLikesEvent(socket){
 function onEvaluateCommentsEvent(socket){
     socket.on('addComment', function(req, res){
         var promotionId = validator.trim(validator.escape(req.id));
-        var comment = validator.trim(validator.escape(req.comment));
+        var comment = req.comment;
         promotionController.addComment(promotionId, comment,
             function(response){
                 console.log(response);

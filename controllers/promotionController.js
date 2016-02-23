@@ -101,9 +101,7 @@ exports.addComment = function(id, comment, callback){
 				_id: id
 			}, {
 				$push: {
-					evaluates: {
-						comments: comment
-					}
+					"evaluates.comments": comment
 				}
 			});
 	update.exec(function(error, result){
