@@ -1,6 +1,11 @@
-var db_string = 'mongodb://diego:diego182@ds055495.mongolab.com:55495/savefood';
+var db_string = 'mongodb://localhost/isnottrash';
+
+if(process.env.PORT){
+  db_string = 'mongodb://diego:diego182@ds055495.mongolab.com:55495/savefood';
+}
 
 var mongoose = require('mongoose').connect(db_string);
+var bcrypt = require('bcrypt-nodejs');
 
 var db = mongoose.connection;
 
@@ -35,15 +40,49 @@ var promotionsSchema = mongoose.Schema({
    }
 });
 
-  /*Esquema do Json dos usuários*/
-  var userSchema = mongoose.Schema({
-    name: String,
-    email: String,
-    password: String,
-    phone: String
-  });
+/*Esquema dos Usuários*/
+var userSchema = mongoose.Schema({
+  name: {
+    type: String,
+    required: true
+  },
+  email:{
+    type: String,
+    required: true,
+    unique: true
+  },
+  password: {
+    type: String,
+    required: true
+  },
+  phone:{
+    type: String,
+    unique: true
+  } 
+});
 
-  exports.User = mongoose.model('User', userSchema);
-  exports.promotions = mongoose.model('promotions', promotionsSchema);
+/*Antes de salvar o usuário, usa criptografia na sua senha*/
+userSchema.pre('save', function(next){
+
+  var user = this;
+
+  bcrypt.genSalt(5, function(err, salt) {
+
+    if(err) return next(err);
+
+    bcrypt.hash(user.password, salt, null, function(err, hash) {
+
+      if(err) return next(err);
+
+      user.password = hash;
+
+      next();
+
+    });
+  });
+});
+
+exports.User = mongoose.model('User', userSchema);
+exports.promotions = mongoose.model('promotions', promotionsSchema);
 
 });
