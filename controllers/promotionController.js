@@ -45,10 +45,7 @@ exports.promotion = function(id, callback){
 };
 
 exports.listByPage = function(skip, limit, callback){
-	var promotions = db.promotions.find({"$where": 'new Date(this.endDate) >= new Date()'}).
-	sort({_id: -1}).
-	skip(skip).
-	limit(limit);
+	var promotions = db.promotions.find().sort({_id: -1}).skip(skip).limit(limit);
 	
   	promotions.exec(function(error, promotions){
    		if(error){

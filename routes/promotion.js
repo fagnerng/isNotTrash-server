@@ -45,9 +45,9 @@ router.get('/pagination/:skip/:limit', function(req, res){
     var skip = parseInt(validator.trim(validator.escape(params.query.skip)));
     var limit = parseInt(validator.trim(validator.escape(params.query.limit)));
 
-  promotionController.listByPage(skip, limit, function(resp) {
+    promotionController.listByPage(skip, limit, function(resp) {
       res.json(resp);
-  });
+    });
 });
 
 
