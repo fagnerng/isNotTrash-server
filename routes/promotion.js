@@ -55,9 +55,16 @@ router.get('/pagination/:skip/:limit', function(req, res){
 router.get('/updateTimeLine/:first', function(req, res){
     var params = url.parse(req.url, true);
     var first = validator.trim(validator.escape(params.query.first));
-    promotionController.listNewPromotions(first, function(resp) {
-        res.json(resp);
-    });
+    if(!first){
+        promotionController.all(function(resp) {
+            res.json(resp);
+        });
+    } else {
+        promotionController.listNewPromotions(first, function(resp) {
+            res.json(resp);
+        });
+    }
+
 });
 
 module.exports = router;
