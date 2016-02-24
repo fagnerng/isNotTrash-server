@@ -1,6 +1,7 @@
-var db_string = 'mongodb://diego:diego182@ds055495.mongolab.com:55495/savefood';
+var myDb = 'mongodb://localhost:27017/test';
+//var db_string = 'mongodb://diego:diego182@ds055495.mongolab.com:55495/savefood';
 
-var mongoose = require('mongoose').connect(db_string);
+var mongoose = require('mongoose').connect(myDb);
 
 var db = mongoose.connection;
 
@@ -9,31 +10,25 @@ db.on('error', console.error.bind(console, 'Erro ao conectar no banco de dados')
 db.once('open', function(){
 
   /*Esquema do Json das promoçoes*/
-var promotionsSchema = mongoose.Schema({
-   company: {
-       name: String,
-       subtitle: String
-   },
-   productName: String,
-   price: Number,
-   old_price: Number,
-   startDate: Number,
-   endDate: Number,
-   reason: String,
-   shelf_life: Number,
-   conservation: String,
-   images: Array,
-   evaluates: {
-       likes: Number,
-       comments: [
-           {
-               date: Number,
-               text: String,
-               user_id: String
-           }
-       ]
-   }
-});
+  var promotionsSchema = mongoose.Schema({
+    company:{
+      name: String,
+      subtitle: String
+    },
+    productName: String,
+    price: Number,
+    old_price: Number,
+    startDate: Number,
+    endDate: Number,
+    reason: String,
+    shelf_life: Number,
+    conservation: String,
+    images: [String],
+    evaluates: {
+      likes: Number,
+      comments: []
+    }
+  });
 
   /*Esquema do Json dos usuários*/
   var userSchema = mongoose.Schema({
@@ -45,5 +40,7 @@ var promotionsSchema = mongoose.Schema({
 
   exports.User = mongoose.model('User', userSchema);
   exports.promotions = mongoose.model('promotions', promotionsSchema);
+
+  //var insertValues = require('');
 
 });

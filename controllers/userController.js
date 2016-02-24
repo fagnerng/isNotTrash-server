@@ -1,4 +1,4 @@
-var db = require('../config/db_config');
+var db = require('../config/db_config.js');
 
 exports.list = function(callback){
     db.User.find({}, function(error, users) {
@@ -42,18 +42,10 @@ exports.update = function(id, name, email, password, phone, callback) {
         if(error) {
             callback({error: 'Não foi possivel atualizar o usuario'});
         } else {
-            if (name) {
-                user.name = name;
-            }
-            if (email) {
-                user.email = email;
-            }
-            if (password) {
-                user.password = password;
-            }
-            if (phone) {
-                user.phone = phone;
-            }
+            user.name = name;
+            user.email = email;
+            user.password = password;
+            user.phone = phone;
             user.save(function (error, user) {
                 if (error) {
                     callback({error: 'Não foi possivel salvar o usuario'});
