@@ -15,7 +15,7 @@ exports.all = function(callback){
 
 exports.listByExpiration = function(callback){
 	/*Valor das durações asc*/
- 	var findQuery = db.promotions.find().sort({'endDate': 1});
+ 	var findQuery = db.promotions.find().sort({endDate: 1});
 
 	findQuery.exec(function(error, promotions){
     	if(error){
@@ -38,9 +38,12 @@ exports.promotion = function(id, callback){
 };
 
 exports.listByPage = function(skip, limit, callback){
-	var findQuery = db.promotions.find().sort({_id: -1}).skip(skip).limit(limit);
-
-	findQuery.exec(function(error, promotions){
+	var promotions = db.promotions.find().
+	sort({_id: -1}).
+	skip(skip).
+	limit(limit);
+	
+  	promotions.exec(function(error, promotions){
    		if(error){
     		callback({error: 'Não foi possível novas promoçoes'});
     	}else{
@@ -49,9 +52,9 @@ exports.listByPage = function(skip, limit, callback){
   	});
 };
 
-exports.listNewPromotions = function(first, callback){
-	var objectId = mongoose.Types.ObjectId(first);
-	var findQuery = db.promotions.find({_id: {$gt: objectId, $ne: first}}).sort({_id :-1});
+exports.listNewPromotions = function(firstId, callback){
+	var objectId = mongoose.Types.ObjectId(firstId);
+	var findQuery = db.promotions.find({_id: {$gt: objectId, $ne: firstId}}).sort({_id :-1});
 
 	findQuery.exec(function(error, promotions){
 		if(error){
