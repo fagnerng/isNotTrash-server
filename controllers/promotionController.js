@@ -1,19 +1,19 @@
 var db = require('../config/db_config.js');
 var mongoose = require('mongoose');
 
-exports.all = function(callback){
+exports.all = function(user_id, callback){
 	var findQuery = db.promotions.find().sort({_id: -1});
 
 	findQuery.exec(function(err, promotions){
 		if (err) {
 			callback({error: 'Não foi possível encontrar promoções'});
 		} else {
-			callback(promotions);
+			callback(generateJson(user_id, promotions));
 		}
 	});
 };
 
-exports.listByExpiration = function(callback){
+exports.listByExpiration = function(user_id, callback){
 	/*Valor das durações asc*/
  	var findQuery = db.promotions.find().sort({endDate: 1});
 
@@ -26,7 +26,7 @@ exports.listByExpiration = function(callback){
   	});
 };
 
-exports.promotion = function(id, callback){
+exports.promotion = function(promotion_id, callback){
  	var findQuery = db.promotions.findOne({_id:id});
 	findQuery.exec(function(error, promotion){
 		if(error){
@@ -37,7 +37,11 @@ exports.promotion = function(id, callback){
 	});
 };
 
-exports.listByPage = function(skip, limit, callback){
+exports.listByPage = function(urlParams, callback){
+	var skip = parseInt(validator.trim(validator.escape(urlParams.query.skip))),
+		limit= parseInt(validator.trim(validator.escape(urlParams.query.limit))),
+		user_id= validator.trim(validator.escape(urlParams.query.user_id));
+
 	var promotions = db.promotions.find().
 	sort({_id: -1}).
 	skip(skip).
@@ -47,12 +51,12 @@ exports.listByPage = function(skip, limit, callback){
    		if(error){
     		callback({error: 'Não foi possível novas promoçoes'});
     	}else{
-    		callback(promotions);
+    		callback(generateJson(user_id, promotions));
     	}
   	});
 };
 
-exports.listNewPromotions = function(firstId, callback){
+exports.listNewPromotions = function(user_id, firstId, callback){
 	var objectId = mongoose.Types.ObjectId(firstId);
 	var findQuery = db.promotions.find({_id: {$gt: objectId, $ne: firstId}}).sort({_id :-1});
 
@@ -61,33 +65,28 @@ exports.listNewPromotions = function(firstId, callback){
 			callback({error: 'Não foi possível novas promoçoes'});
 			console.log(error);
 		}else{
-			callback(promotions);
+			callback(generateJson(user_id, promotions));
 		}
 	});
 };
 
 exports.addLike = function(params,  callback){
-	//refatorar usando promises
-	var modifyObject = {};
-	modifyObject[params.user_id] = true;
 	var updateQuery = db.promotions.update(
 		{_id : params._id},
 		{
-			evaluates: {
-				user_likes: {
-					$set: modifyObject
-				}
+			$push: {
+				'evaluates.user_likes': params.user_id
 			}
 
-		}
-		//{new: true}
+		},
+		{new: true}
 	);
 	updateQuery.exec(function(error, documents){
 		if(error){
 			callback({error: 'Não foi possível recomendar esse item'});
 			console.log(error);
 		}else{
-			callback(documents);
+			callback(generateJson(documents));
 		}
 	});
 };
@@ -111,4 +110,26 @@ exports.addComment = function(id, comment, callback){
 			callback(result);
 		}
 	});
+};
+
+exports.getComments = function(promotion_id, callback){
+	var queryFind = db.promotions.find({_id: promotion_id});
+	queryFind.exec(function(error, result){
+		if(error){
+			callback({error: 'Não foi possível recomendar esse item'});
+			console.log(error);
+		}else{
+			callback(result.evaluates.comments);
+		}
+	});
+};
+
+function generateJson(user_id, promotions){
+	for(var key in promotions){
+		var user_likes = promotions[key].evaluates.user_likes;
+		if(user_likes.contains(user_id)){
+			promotions.like = true;
+		}
+		delete promotions[key].evaluates;
+	}
 };

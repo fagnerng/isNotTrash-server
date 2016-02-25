@@ -40,27 +40,25 @@ router.get('/:id', function(req, res){
 });
 
 /*Implementa serviço de requisição de produtos por página e por tamanho de página.*/
-router.get('/pagination/:skip/:limit', function(req, res){
-    var params = url.parse(req.url, true);
-    var skip = parseInt(validator.trim(validator.escape(params.query.skip)));
-    var limit = parseInt(validator.trim(validator.escape(params.query.limit)));
-
-    promotionController.listByPage(skip, limit, function(resp) {
+router.get('/pagination', function(req, res){
+    var urlParams = url.parse(req.url, true);
+    promotionController.listByPage(urlParams, function(resp) {
       res.json(resp);
     });
 });
 
 
 /*Implementa serviço de requisição de produtos por página e por tamanho de página. Fazer acontecer com webScoket*/
-router.get('/updateTimeLine/:first', function(req, res){
+router.get('/updateTimeLine', function(req, res){
     var params = url.parse(req.url, true);
     var first = validator.trim(validator.escape(params.query.first));
+    var user_id = validator.trim(validator.escape(params.query.user_id));
     if(!first){
-        promotionController.all(function(resp) {
+        promotionController.all(user_id, function(resp) {
             res.json(resp);
         });
     } else {
-        promotionController.listNewPromotions(first, function(resp) {
+        promotionController.listNewPromotions(user_id, first, function(resp) {
             res.json(resp);
         });
     }

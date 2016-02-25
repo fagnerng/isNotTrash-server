@@ -18,7 +18,7 @@ io.on('connection', function(socket){
 function onEvaluateLikesEvent(socket){
     socket.on('addLike', function(req, res){
         var params = {
-            _id: validator.trim(validator.escape(req.id)),
+            _id: validator.trim(validator.escape(req.promotion_id)),
             user_id: validator.trim(validator.escape(req.user_id))
         };
         promotionController.addLike(params,

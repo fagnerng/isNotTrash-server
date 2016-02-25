@@ -25,7 +25,7 @@ db.once('open', function(){
     conservation: String,
     images: [String],
     evaluates: {
-      user_likes: {},
+      user_likes: [],
       comments: []
     }
   });
