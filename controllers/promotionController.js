@@ -66,25 +66,32 @@ exports.listNewPromotions = function(firstId, callback){
 	});
 };
 
-exports.updateTotalLikes = function(id, totalLikes, callback){
+exports.addLike = function(params,  callback){
 	//refatorar usando promises
+	var modifyObject = {};
+	modifyObject[params.user_id] = true;
 	var updateQuery = db.promotions.update(
-		{_id : id},
+		{_id : params._id},
 		{
-			$set: {
-				"evaluates.likes": totalLikes
+			evaluates: {
+				user_likes: {
+					$set: modifyObject
+				}
 			}
+
 		}
+		//{new: true}
 	);
-	updateQuery.exec(function(error, result){
+	updateQuery.exec(function(error, documents){
 		if(error){
 			callback({error: 'Não foi possível recomendar esse item'});
 			console.log(error);
 		}else{
-			callback(result);
+			callback(documents);
 		}
 	});
 };
+
 
 exports.addComment = function(id, comment, callback){
 	//refatorar usando promises

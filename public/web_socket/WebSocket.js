@@ -17,12 +17,15 @@ io.on('connection', function(socket){
 /*Update the likes in the promotion*/
 function onEvaluateLikesEvent(socket){
     socket.on('addLike', function(req, res){
-        var promotionId = validator.trim(validator.escape(req.id));
-        var likes = validator.trim(validator.escape(req.likes));
-        promotionController.updateTotalLikes(promotionId, likes,
-            function(response){
-                console.log(response);
-                socket.broadcast.emit('updateLikes', {likes: likes});
+        var params = {
+            _id: validator.trim(validator.escape(req.id)),
+            user_id: validator.trim(validator.escape(req.user_id))
+        };
+        promotionController.addLike(params,
+            function(documents){
+                var likes = documents.evaluates.user_likes;
+                console.log(response);//Object.keys(obj).length
+                socket.broadcast.emit('updateLikes', {likes: Object.keys(likes).length});
             }
         );
 
@@ -37,7 +40,7 @@ function onEvaluateCommentsEvent(socket){
         promotionController.addComment(promotionId, comment,
             function(response){
                 console.log(response);
-                socket.broadcast.emit('updateRecomendations', {comment: comment});
+                socket.broadcast.emit('updateComments', {comment: comment});
             }
         );
     });
