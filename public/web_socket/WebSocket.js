@@ -16,18 +16,18 @@ io.on('connection', function(socket){
 
 /*Update the likes in the promotion*/
 function onEvaluateLikesEvent(socket){
-    socket.on('addLike', function(req, res){
+    socket.on('addLike', function(req){
         var params = {
             _id: validator.trim(validator.escape(req.promotion_id)),
             user_id: validator.trim(validator.escape(req.user_id))
         };
-        promotionController.addLike(params,
-            function(documents){
-                var likes = documents.evaluates.user_likes;
-                console.log(response);//Object.keys(obj).length
-                socket.broadcast.emit('updateLikes', {likes: Object.keys(likes).length});
-            }
-        );
+        promotionController.addLike(params).then(function(documents){
+            var likes = documents.evaluates.user_likes;
+            console.log(likes.length);
+            socket.broadcast.emit('updateLikes', {likes: likes.length});
+        }).catch(function(error){
+            socket.broadcast.emit('error', {error: error});
+        });
 
     });
 }
@@ -37,12 +37,12 @@ function onEvaluateCommentsEvent(socket){
     socket.on('addComment', function(req, res){
         var promotionId = validator.trim(validator.escape(req.id));
         var comment = req.comment;
-        promotionController.addComment(promotionId, comment,
-            function(response){
-                console.log(response);
-                socket.broadcast.emit('updateComments', {comment: comment});
-            }
-        );
+        promotionController.addComment(promotionId, comment).then(function(response){
+            console.log(response);
+            socket.broadcast.emit('updateComments', {comment: comment});
+        }).catch(function(error){
+            socket.broadcast.emit('error', {error: error});
+        });
     });
 }
 
