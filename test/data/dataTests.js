@@ -203,7 +203,7 @@ var promotions =
 /*
 * var promotions =
  [
- {company:{ name: 'Atacadão', subtitle: 'Supermercado atacado e varejo' }, productName:'Alfaces', price: 2.50, old_price: 8.00, startDate: 1456066800000, endDate: 1456419600000, reason: 'Danificação', shelf_life:1456851600000, conservation: 'freezer', images: ['http://hortas.info/sites/default/files/field/image/alface001.jpg'], evaluates: { likes: 25, comments: [ { date: 1456851600000, text: 'Não gostei, os alimentos pareciam podres', user_id: '' }, { date: 1456851600000, text: 'Não gostei, os alimentos pareciam podres', user_id: '' }, { date: 1456851600000, text: 'Não gostei, os alimentos pareciam podres', user_id: '' }, { date: 1456851600000, text: 'Não gostei, os alimentos pareciam podres', user_id: '' } ] } },
+ {company:{ name: 'Atacadão', subtitle: 'Supermercado atacado e varejo' }, productName:'Alfaces', price:{ actual: 2.50, old: 8.00, unit:'kg'}, startDate: 1456066800000, endDate: 1456419600000, reason: 'Danificação', shelf_life:1456851600000, conservation: 'freezer', images: ['http://hortas.info/sites/default/files/field/image/alface001.jpg'], evaluates: { user_likes: [ObjectId('56d13ba9a19b0e142ad37156')], comments: [ { date: 1456851600000, text: 'Não gostei, os alimentos pareciam podres', user_id: ObjectId('56d13ba9a19b0e142ad37156') }, { date: 1456851600000, text: 'Não gostei, os alimentos pareciam podres', user_id: ObjectId('56d13ba9a19b0e142ad37156') }, { date: 1456851600000, text: 'Não gostei, os alimentos pareciam podres', user_id: ObjectId('56d13ba9a19b0e142ad37156') }, { date: 1456851600000, text: 'Não gostei, os alimentos pareciam podres', user_id: ObjectId('56d13ba9a19b0e142ad37156') } ] } },
  {
  company:{
  name: 'Maxxi',

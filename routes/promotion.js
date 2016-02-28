@@ -6,7 +6,7 @@ var promotionController = require('../controllers/promotionController.js');
 var validator = require('validator');
 
 /*Implementa método GET para recuperar todas as promoções*/
-router.post('/', function(req, res){
+router.get('/', function(req, res){
     var params = url.parse(req.url, true).query;
 
     promotionController.all(params.user_id).then(function(resp) {
@@ -36,7 +36,7 @@ router.post('/', function(req, res){
 });*/
 
 /*Implementa serviço de requisição de produtos por página e por tamanho de página.*/
-router.post('/morePromotions', function(req, res){
+router.get('/morePromotions', function(req, res){
     var urlParams = url.parse(req.url, true).query,
         skip = parseInt(validator.trim(validator.escape(urlParams.skip))),
         limit= parseInt(validator.trim(validator.escape(urlParams.limit))),

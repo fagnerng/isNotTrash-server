@@ -8,7 +8,7 @@ var promotionController = require('../../controllers/promotionController.js');
 var validator = require('validator');
 
 io.on('connection', function(socket){
-    socket.on('init', function(json){ // the json contains the token authentication
+    socket.on('init', function(){ // the json contains the token authentication
         onEvaluateLikesEvent(socket);
         onEvaluateCommentsEvent(socket);
     });
@@ -16,32 +16,46 @@ io.on('connection', function(socket){
 
 /*Update the likes in the promotion*/
 function onEvaluateLikesEvent(socket){
+
+    function sendBroadcastUpdateLikes(document){
+        var likes = document.evaluates.user_likes;
+        var promotion_id = document._id;
+        io.sockets.emit('updateLikes', {promotion_id: promotion_id,likes: likes.length});
+    }
+
     socket.on('addLike', function(req){
         var params = {
-            _id: validator.trim(validator.escape(req.promotion_id)),
+            promotion_id: validator.trim(validator.escape(req.promotion_id)),
             user_id: validator.trim(validator.escape(req.user_id))
         };
-        promotionController.addLike(params).then(function(documents){
-            var likes = documents.evaluates.user_likes;
-            console.log(likes.length);
-            socket.broadcast.emit('updateLikes', {likes: likes.length});
-        }).catch(function(error){
+        promotionController.addLike(params).then(sendBroadcastUpdateLikes).catch(function(error){
             socket.broadcast.emit('error', {error: error});
         });
 
+    });
+
+    socket.on('removeLike', function(req){
+        var params = {
+            promotion_id: validator.trim(validator.escape(req.promotion_id)),
+            user_id: validator.trim(validator.escape(req.user_id))
+        };
+
+        promotionController.removeLike(params).then(sendBroadcastUpdateLikes).catch(
+            function(error){
+                socket.broadcast.emit('error', {error: error});
+            }
+        );
     });
 }
 
 /*Add comment events*/
 function onEvaluateCommentsEvent(socket){
-    socket.on('addComment', function(req, res){
-        var promotionId = validator.trim(validator.escape(req.id));
+    socket.on('addComment', function(req){
+        var promotion_id = validator.trim(validator.escape(req.promotion_id));
         var comment = req.comment;
-        promotionController.addComment(promotionId, comment).then(function(response){
+        promotionController.addComment(promotion_id, comment).then(function(response){
             console.log(response);
             socket.broadcast.emit('updateComments', {comment: comment});
-        }).catch(function(error){
-            socket.broadcast.emit('error', {error: error});
         });
     });
 }
