@@ -11,6 +11,14 @@ io.on('connection', function(socket){
     socket.on('init', function(){ // the json contains the token authentication
         onEvaluateLikesEvent(socket);
         onEvaluateCommentsEvent(socket);
+
+        socket.on('disconnect', function(json) {
+            console.log('Got disconnect!');
+        });
+
+        socket.on('error', function(exception) {
+            console.log('SOCKET ERROR');
+        });
     });
 });
 
@@ -20,7 +28,7 @@ function onEvaluateLikesEvent(socket){
     function sendBroadcastUpdateLikes(document){
         var likes = document.evaluates.user_likes;
         var promotion_id = document._id;
-        io.sockets.emit('updateLikes', {promotion_id: promotion_id,likes: likes.length});
+        socket.broadcast.emit('updateLikes', {promotion_id: promotion_id,likes: likes.length});
     }
 
     socket.on('addLike', function(req){
@@ -29,7 +37,7 @@ function onEvaluateLikesEvent(socket){
             user_id: validator.trim(validator.escape(req.user_id))
         };
         promotionController.addLike(params).then(sendBroadcastUpdateLikes).catch(function(error){
-            socket.broadcast.emit('error', {error: error});
+            //socket.broadcast.emit('error', {error: error});
         });
 
     });
@@ -40,9 +48,9 @@ function onEvaluateLikesEvent(socket){
             user_id: validator.trim(validator.escape(req.user_id))
         };
 
-        promotionController.removeLike(params).then(sendBroadcastUpdateLikes).catch(
+        promotionController.removeLike(params).then(sendBroadcastUpdateLikes()).catch(
             function(error){
-                socket.broadcast.emit('error', {error: error});
+                //socket.broadcast.emit('error', {error: error});
             }
         );
     });

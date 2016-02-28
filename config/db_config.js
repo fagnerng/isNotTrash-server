@@ -1,4 +1,4 @@
-//var myDb = 'mongodb://localhost:27017/test';
+//var db_string = 'mongodb://localhost:27017/test';
 var db_string = 'mongodb://diego:diego182@ds055495.mongolab.com:55495/savefood';
 
 var mongoose = require('mongoose').connect(db_string);
