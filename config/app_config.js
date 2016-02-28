@@ -4,7 +4,7 @@ var bodyParser =  require('body-parser');
 
 var app = module.exports = express();
 var server = require('http').Server(app);
-var io = require('../public/web_socket/WebSocket.js');
+var io = require('./web_socket/WebSocket.js');
 
 /*Serviço rodando na porta 1337*/
 var ip = process.env.IP || 'localhost';
