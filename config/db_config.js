@@ -4,6 +4,8 @@ var db_string = 'mongodb://diego:diego182@ds055495.mongolab.com:55495/savefood';
 var mongoose = require('mongoose').connect(db_string);
 
 var db = mongoose.connection;
+var ObjectId = mongoose.Schema.Types.ObjectId;
+
 
 db.on('error', console.error.bind(console, 'Erro ao conectar no banco de dados'));
 
@@ -16,17 +18,26 @@ db.once('open', function(){
       subtitle: String
     },
     productName: String,
-    price: Number,
-    old_price: Number,
-    startDate: Number,
-    endDate: Number,
+    price: {
+      unit: String,
+      actual: Number,
+      old: Number
+    },
+    startDate: Date,
+    endDate: Date,
     reason: String,
-    shelf_life: Number,
+    shelf_life: Date,
     conservation: String,
     images: [String],
     evaluates: {
-      likes: Number,
-      comments: []
+      user_likes: [ObjectId],
+      comments: [
+        {
+          user_id: ObjectId,
+          date: Date,
+          text: String
+        }
+      ]
     }
   });
 
