@@ -8,28 +8,28 @@ var validator = require('validator');
 
 
 /*Implementa método GET para recuperar promoções*/
-router.get('/', function(req, res){
+router.post('/', function(req, res){
   promotionController.list(function(resp) {
       res.json(resp);
     });
 });
 
 /*Implementa método GET para recuperar todas as promoções*/
-router.get('/all', function(req, res){
+router.post('/all', function(req, res){
     promotionController.all(function(resp) {
         res.json(resp);
     });
 });
 
 /*Implementa algoritmo de ordenação dos produtos (por tempo de duração)*/
-router.get('/sortByExpiration', function(req, res){
+router.post('/sortByExpiration', function(req, res){
   promotionController.listByExpiration(function(resp) {
       res.json(resp);
   });
 });
 
 /*Implementa método GET para recuperar uma promoção específica*/
-router.get('/:id', function(req, res){
+router.post('/:id', function(req, res){
     var params = url.parse(req.url, true);
     var id = validator.trim(validator.escape(params.query.id));
     console.log(id);
@@ -40,7 +40,7 @@ router.get('/:id', function(req, res){
 });
 
 /*Implementa serviço de requisição de produtos por página e por tamanho de página.*/
-router.get('/pagination/:skip/:limit', function(req, res){
+router.post('/pagination/:skip/:limit', function(req, res){
     var params = url.parse(req.url, true);
     var skip = parseInt(validator.trim(validator.escape(params.query.skip)));
     var limit = parseInt(validator.trim(validator.escape(params.query.limit)));
@@ -52,7 +52,7 @@ router.get('/pagination/:skip/:limit', function(req, res){
 
 
 /*Implementa serviço de requisição de produtos por página e por tamanho de página. Fazer acontecer com webScoket*/
-router.get('/updateTimeLine/:first', function(req, res){
+router.post('/updateTimeLine/:first', function(req, res){
     var params = url.parse(req.url, true);
     var first = validator.trim(validator.escape(params.query.first));
     if(!first){
@@ -64,7 +64,6 @@ router.get('/updateTimeLine/:first', function(req, res){
             res.json(resp);
         });
     }
-
 });
 
 module.exports = router;
