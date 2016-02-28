@@ -17,7 +17,7 @@ io.on('connection', function(socket){
         });
 
         socket.on('error', function(exception) {
-            console.log('SOCKET ERROR');
+            console.log('SOCKET ERROR ' + exception);
         });
     });
 });
@@ -31,15 +31,16 @@ function onEvaluateLikesEvent(socket){
         socket.broadcast.emit('updateLikes', {promotion_id: promotion_id,likes: likes.length});
     }
 
+    function errorCallback(error){
+
+    }
+
     socket.on('addLike', function(req){
         var params = {
             promotion_id: validator.trim(validator.escape(req.promotion_id)),
             user_id: validator.trim(validator.escape(req.user_id))
         };
-        promotionController.addLike(params).then(sendBroadcastUpdateLikes).catch(function(error){
-            //socket.broadcast.emit('error', {error: error});
-        });
-
+        promotionController.addLike(params).then(sendBroadcastUpdateLikes).catch(errorCallback);
     });
 
     socket.on('removeLike', function(req){
@@ -48,11 +49,7 @@ function onEvaluateLikesEvent(socket){
             user_id: validator.trim(validator.escape(req.user_id))
         };
 
-        promotionController.removeLike(params).then(sendBroadcastUpdateLikes()).catch(
-            function(error){
-                //socket.broadcast.emit('error', {error: error});
-            }
-        );
+        promotionController.removeLike(params).then(sendBroadcastUpdateLikes).catch(errorCallback);
     });
 }
 
