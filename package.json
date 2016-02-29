@@ -18,9 +18,11 @@
   },
   "homepage": "https://github.com/BrunoRafael/isNotTrash-server#readme",
   "dependencies": {
+    "bcrypt-nodejs": "0.0.3",
     "body-parser": "1.14.2",
     "express": "4.13.4",
     "find": "^0.2.4",
+    "jsonwebtoken": "^5.7.0",
     "mongoose": "4.2.4",
     "morgan": "1.6.1",
     "mquery": "^1.6.3",
