@@ -18,9 +18,13 @@ io.on('connection', function(socket){
 function onEvaluateLikesEvent(socket){
 
     function sendBroadcastUpdateLikes(document){
-        var likes = document.evaluates.user_likes;
-        var promotion_id = document._id;
-        io.sockets.emit('updateLikes', {promotion_id: promotion_id,likes: likes.length});
+        if(!document.error) {
+            var likes = document.evaluates.user_likes;
+            var promotion_id = document._id;
+            io.sockets.emit('updateLikes', {promotion_id: promotion_id, likes: likes.length});
+        } else {
+            io.sockets.emit('error', {error: error});
+        }
     }
 
     socket.on('addLike', function(req){
@@ -28,10 +32,7 @@ function onEvaluateLikesEvent(socket){
             promotion_id: validator.trim(validator.escape(req.promotion_id)),
             user_id: validator.trim(validator.escape(req.user_id))
         };
-        promotionController.addLike(params).then(sendBroadcastUpdateLikes).catch(function(error){
-            socket.broadcast.emit('error', {error: error});
-        });
-
+        promotionController.addLike(params, sendBroadcastUpdateLikes);
     });
 
     socket.on('removeLike', function(req){
@@ -40,11 +41,8 @@ function onEvaluateLikesEvent(socket){
             user_id: validator.trim(validator.escape(req.user_id))
         };
 
-        promotionController.removeLike(params).then(sendBroadcastUpdateLikes).catch(
-            function(error){
-                socket.broadcast.emit('error', {error: error});
-            }
-        );
+        promotionController.removeLike(params, sendBroadcastUpdateLikes);
+
     });
 }
 
@@ -53,8 +51,7 @@ function onEvaluateCommentsEvent(socket){
     socket.on('addComment', function(req){
         var promotion_id = validator.trim(validator.escape(req.promotion_id));
         var comment = req.comment;
-        promotionController.addComment(promotion_id, comment).then(function(response){
-            console.log(response);
+        promotionController.addComment(promotion_id, comment, function(response){
             socket.broadcast.emit('updateComments', {comment: comment});
         });
     });
