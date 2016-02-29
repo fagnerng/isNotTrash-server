@@ -51,4 +51,13 @@ router.post('/newPromotions', function(req, res){
     }
 });
 
+router.post('/addPromotion', function(req, res){
+    var json = url.parse(req.url, true).query;
+    promotionController.addPromotion(json).then(function(resp){
+        res.json(resp);
+    }).catch(function(error){
+        console.log(error);
+    });
+});
+
 module.exports = router;

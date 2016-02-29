@@ -1,5 +1,6 @@
 var db = require('../config/db_config.js');
 var mongoose = require('mongoose');
+var timeout = require('../resources/timeout/timeout.js');
 
 exports.all = function(user_id, callback){
 	var findQuery = db.promotions.find().sort({_id: -1});
@@ -148,6 +149,20 @@ exports.getComments = function(promotion_id, callback){
 
 };
 
+exports.addPromotion = function(json){
+	var insertQuery = db.promotions.insert(json);
+	return new Promise(function(resolve, reject){
+		insertQuery.exec(function(error, response){
+			if(error){
+				reject(error);
+			} else {
+				timeout.insertNewTimeout(json);
+				resolve(response);
+			}
+		});
+	});
+};
+
 function generateJson(user_id, promotions){
 	for(var key in promotions){
 		var user_likes = promotions[key].evaluates.user_likes;
@@ -155,7 +170,12 @@ function generateJson(user_id, promotions){
 			promotions[key]._doc.like = true;
 		}
 		promotions[key]._doc.likes = user_likes.length;
+		promotions[key]._doc.ended = isEnded();
 		delete promotions[key]._doc.evaluates;
 	}
 	return promotions;
+}
+
+function isEnded(date){
+	return Date.now < new date;
 }
