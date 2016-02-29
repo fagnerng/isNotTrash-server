@@ -9,11 +9,11 @@ var validator = require('validator');
 router.get('/', function(req, res){
     var params = url.parse(req.url, true).query;
 
-    promotionController.all(params.user_id).then(function(resp) {
-        res.json(resp);
-    }).catch(function(error){
-        res.json(error);
-    });
+    promotionController.all(params.user_id,
+        function(resp) {
+            res.json(resp);
+        }
+    );
 });
 
 /*Implementa algoritmo de ordenação dos produtos (por tempo de duração)*/
@@ -42,15 +42,11 @@ router.get('/morePromotions', function(req, res){
         limit= parseInt(validator.trim(validator.escape(urlParams.limit))),
         user_id= validator.trim(validator.escape(urlParams.user_id));
 
-    promotionController.listByPage(user_id, skip, limit).then(
+    promotionController.listByPage(user_id, skip, limit,
         function(resp) {
             res.json(resp);
         }
-    ).catch(
-        function(error){
-            res.json(error);
-        }
-    );
+    )
 });
 
 
@@ -60,23 +56,15 @@ router.get('/newPromotions', function(req, res){
     var first = validator.trim(validator.escape(params.first));
     var user_id = validator.trim(validator.escape(params.user_id));
     if(!first){
-        promotionController.all(user_id).then(
+        promotionController.all(user_id,
             function(resp) {
                 res.json(resp);
-            }
-        ).catch(
-            function(error){
-                res.json(error);
             }
         );
     } else {
-        promotionController.listNewPromotions(user_id, first).then(
+        promotionController.listNewPromotions(user_id, first,
             function(resp) {
                 res.json(resp);
-            }
-        ).catch(
-            function(error) {
-                res.json(error);
             }
         );
     }

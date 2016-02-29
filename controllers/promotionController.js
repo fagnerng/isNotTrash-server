@@ -1,16 +1,14 @@
 var db = require('../config/db_config.js');
 var mongoose = require('mongoose');
 
-exports.all = function(user_id){
+exports.all = function(user_id, callback){
 	var findQuery = db.promotions.find().sort({_id: -1});
-	return new Promise(function(resolve, reject){
-		findQuery.exec(function(err, promotions){
-			if (err) {
-				reject({error: 'Não foi possível encontrar promoções'});
-			} else {
-				resolve(generateJson(user_id, promotions));
-			}
-		});
+	findQuery.exec(function(err, promotions){
+		if (err) {
+			callback({error: 'Não foi possível encontrar promoções'});
+		} else {
+			callback(generateJson(user_id, promotions));
+		}
 	});
 
 };
@@ -38,41 +36,39 @@ exports.all = function(user_id){
 	});
 };*/
 
-exports.listByPage = function(user_id, skip, limit){
+exports.listByPage = function(user_id, skip, limit, callback){
 	var promotions = db.promotions.find().
 	sort({_id: -1}).
 	skip(skip).
 	limit(limit);
 
-	return new Promise(function(resolve, reject){
-		promotions.exec(function(error, promotions){
-			if(error){
-				reject({error: 'Não foi possível novas promoçoes'});
-			}else{
-				resolve(generateJson(user_id, promotions));
-			}
-		});	});
-
-};
-
-exports.listNewPromotions = function(user_id, firstId){
-	var objectId = mongoose.Types.ObjectId(firstId);
-	var findQuery = db.promotions.find({_id: {$gt: objectId, $ne: firstId}}).sort({_id :-1});
-
-	return new Promise(function(resolve, reject){
-		findQuery.exec(function(error, promotions){
-			if(error){
-				reject({error: 'Não foi possível novas promoçoes'});
-				console.log(error);
-			}else{
-				resolve(generateJson(user_id, promotions));
-			}
-		});
+	promotions.exec(function(error, promotions){
+		if(error){
+			callback({error: 'Não foi possível novas promoçoes'});
+		}else{
+			callback(generateJson(user_id, promotions));
+		}
 	});
 
 };
 
-exports.addLike = function(params){
+exports.listNewPromotions = function(user_id, firstId, callback){
+	var objectId = mongoose.Types.ObjectId(firstId);
+	var findQuery = db.promotions.find({_id: {$gt: objectId, $ne: firstId}}).sort({_id :-1});
+
+	findQuery.exec(function(error, promotions){
+		if(error){
+			callback({error: 'Não foi possível novas promoçoes'});
+			console.log(error);
+		}else{
+			callback(generateJson(user_id, promotions));
+		}
+	});
+
+
+};
+
+exports.addLike = function(params, callback){
 	var userId = mongoose.Types.ObjectId(params.user_id);
 	var updateQuery = db.promotions.findOneAndUpdate(
 		{_id : params.promotion_id},
@@ -83,20 +79,18 @@ exports.addLike = function(params){
 		},
 		{new: true}
 	);
-	return new Promise(function(resolve, reject){
-		updateQuery.exec(function(error, document){
-			if(error){
-				reject({error: 'Não foi possível recomendar esse item'});
-				console.log(error);
-			}else{
-				resolve(document);
-			}
-		});
+	updateQuery.exec(function(error, document){
+		if(error){
+			callback({error: 'Não foi possível recomendar esse item'});
+			console.log(error);
+		}else{
+			callback(document);
+		}
 	});
 
 };
 
-exports.removeLike = function(params){
+exports.removeLike = function(params, callback){
 	var userId = mongoose.Types.ObjectId(params.user_id);
 	var updateQuery = db.promotions.findOneAndUpdate(
 		{_id : params.promotion_id},
@@ -107,20 +101,18 @@ exports.removeLike = function(params){
 		},
 		{new: true}
 	);
-	return new Promise(function(resolve, reject){
-		updateQuery.exec(function(error, document){
-			if(error){
-				reject({error: 'Não foi possível recomendar esse item'});
-				console.log(error);
-			}else{
-				resolve(document);
-			}
-		});
+	updateQuery.exec(function(error, document){
+		if(error){
+			callback({error: 'Não foi possível recomendar esse item'});
+			console.log(error);
+		}else{
+			callback(document);
+		}
 	});
 
 };
 
-exports.addComment = function(id, comment){
+exports.addComment = function(id, comment, callback){
 	//refatorar usando promises
 	var updateQuery = db.promotions.update(
 			{
@@ -131,31 +123,27 @@ exports.addComment = function(id, comment){
 				}
 			});
 
-	return new Promise(function(resolve, reject){
 		updateQuery.exec(function(error, result){
 			if(error){
-				reject({error: 'Não foi possível recomendar esse item'});
+				callback({error: 'Não foi possível recomendar esse item'});
 				console.log(error);
 			}else{
-				resolve(result);
+				callback(result);
 			}
 		});
-	});
 
 };
 
-exports.getComments = function(promotion_id){
+exports.getComments = function(promotion_id, callback){
 	var queryFind = db.promotions.find({_id: promotion_id});
 
-	return new Promise(function(resolve, reject){
-		queryFind.exec(function(error, result){
-			if(error){
-				reject({error: 'Não foi possível recomendar esse item'});
-				console.log(error);
-			}else{
-				resolve(result.evaluates.comments);
-			}
-		});
+	queryFind.exec(function(error, result){
+		if(error){
+			callback({error: 'Não foi possível recomendar esse item'});
+			console.log(error);
+		}else{
+			callback(result.evaluates.comments);
+		}
 	});
 
 };
