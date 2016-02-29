@@ -40,7 +40,7 @@ exports.all = function(user_id){
 
 exports.listByPage = function(user_id, skip, limit){
 	var promotions = db.promotions.find().
-	sort({_id: 1}).
+	sort({_id: -1}).
 	skip(skip).
 	limit(limit);
 
@@ -57,7 +57,7 @@ exports.listByPage = function(user_id, skip, limit){
 
 exports.listNewPromotions = function(user_id, firstId){
 	var objectId = mongoose.Types.ObjectId(firstId);
-	var findQuery = db.promotions.find({_id: {$gt: objectId, $ne: firstId}}).sort({_id :1});
+	var findQuery = db.promotions.find({_id: {$gt: objectId, $ne: firstId}}).sort({_id :-1});
 
 	return new Promise(function(resolve, reject){
 		findQuery.exec(function(error, promotions){
