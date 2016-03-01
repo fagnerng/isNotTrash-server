@@ -2,13 +2,13 @@ var db = require('../config/db_config.js');
 var mongoose = require('mongoose');
 var timeout = require('../resources/timeout/timeout.js');
 
-exports.all = function(user_id, callback){
+exports.all = function(email, callback){
 	var findQuery = db.promotions.find().sort({_id: -1});
 	findQuery.exec(function(err, promotions){
 		if (err) {
 			callback({error: 'Não foi possível encontrar promoções'});
 		} else {
-			callback(generateJson(user_id, promotions));
+			callback(generateResponse(email, promotions));
 		}
 	});
 
@@ -37,7 +37,7 @@ exports.all = function(user_id, callback){
 	});
 };*/
 
-exports.listByPage = function(user_id, skip, limit, callback){
+exports.listByPage = function(email, skip, limit, callback){
 	var promotions = db.promotions.find().
 	sort({_id: -1}).
 	skip(skip).
@@ -47,13 +47,13 @@ exports.listByPage = function(user_id, skip, limit, callback){
 		if(error){
 			callback({error: 'Não foi possível novas promoçoes'});
 		}else{
-			callback(generateJson(user_id, promotions));
+			callback(generateResponse(email, promotions));
 		}
 	});
 
 };
 
-exports.listNewPromotions = function(user_id, firstId, callback){
+exports.listNewPromotions = function(email, firstId, callback){
 	var objectId = mongoose.Types.ObjectId(firstId);
 	var findQuery = db.promotions.find({_id: {$gt: objectId, $ne: firstId}}).sort({_id :-1});
 
@@ -62,7 +62,7 @@ exports.listNewPromotions = function(user_id, firstId, callback){
 			callback({error: 'Não foi possível novas promoçoes'});
 			console.log(error);
 		}else{
-			callback(generateJson(user_id, promotions));
+			callback(generateResponse(email, promotions));
 		}
 	});
 
@@ -70,12 +70,12 @@ exports.listNewPromotions = function(user_id, firstId, callback){
 };
 
 exports.addLike = function(params, callback){
-	var userId = mongoose.Types.ObjectId(params.user_id);
+	var email = params.email;
 	var updateQuery = db.promotions.findOneAndUpdate(
 		{_id : params.promotion_id},
 		{
 			$push: {
-				'evaluates.user_likes': userId
+				'evaluates.user_likes': email
 			}
 		},
 		{new: true}
@@ -92,12 +92,12 @@ exports.addLike = function(params, callback){
 };
 
 exports.removeLike = function(params, callback){
-	var userId = mongoose.Types.ObjectId(params.user_id);
+	var email = params.email;
 	var updateQuery = db.promotions.findOneAndUpdate(
 		{_id : params.promotion_id},
 		{
 			$pull: {
-				'evaluates.user_likes': userId
+				'evaluates.user_likes': email
 			}
 		},
 		{new: true}
@@ -149,33 +149,47 @@ exports.getComments = function(promotion_id, callback){
 
 };
 
-exports.addPromotion = function(json){
+exports.addPromotion = function(json, callback){
 	var insertQuery = db.promotions.insert(json);
-	return new Promise(function(resolve, reject){
-		insertQuery.exec(function(error, response){
-			if(error){
-				reject(error);
-			} else {
-				timeout.insertNewTimeout(json);
-				resolve(response);
-			}
-		});
+	insertQuery.exec(function(error, response){
+		if(error){
+			callback(error);
+		} else {
+			timeout.insertNewTimeout(json);
+			callback(response);
+		}
 	});
 };
 
-function generateJson(user_id, promotions){
+function generateResponse(email, promotions){
+	var response = [];
 	for(var key in promotions){
+		var doc = promotions[key];
+		var item = {
+			_id: doc._id,
+			company: doc.company,
+			productName: doc.productName,
+			price: doc.price,
+			startDate: doc.startDate,
+			endDate: doc.endDate,
+			reason: doc.reason,
+			shelf_life: doc.shelf_life,
+			conservation: doc.conservation,
+			images: doc.images,
+		};
+
 		var user_likes = promotions[key].evaluates.user_likes;
-		if(user_likes.indexOf(user_id) > -1){
-			promotions[key]._doc.like = true;
+		if(user_likes.indexOf(email) > -1){
+			item.like = true;
 		}
-		promotions[key]._doc.likes = user_likes.length;
-		promotions[key]._doc.ended = isEnded();
-		delete promotions[key]._doc.evaluates;
+		item.likes = user_likes.length;
+		item.ended = isEnded(item.endDate);
+
+		response.push(item);
 	}
-	return promotions;
+	return response;
 }
 
 function isEnded(date){
-	return Date.now < new date;
+	return Date.now() > new Date(date);
 }

@@ -17,7 +17,7 @@ exports.login = function(email, password, callback){
   	}else if(user){
   		user.passwordVerification(password, function(ismatch){
   			if(ismatch){
-		      	var token = jwt.sign(user.name, config.secret);
+		      	var token = jwt.sign(user.email, config.secret);
   				
   				callback({
 				success: true,

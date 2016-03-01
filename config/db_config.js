@@ -1,4 +1,4 @@
-var db_string = 'mongodb://localhost/isnottrash';
+var db_string = 'mongodb://localhost/test';
 
 if(process.env.PORT){
   db_string = 'mongodb://diego:diego182@ds055495.mongolab.com:55495/savefood';
@@ -8,8 +8,6 @@ var mongoose = require('mongoose').connect(db_string);
 var bcrypt = require('bcrypt-nodejs');
 
 var db = mongoose.connection;
-var ObjectId = mongoose.Schema.Types.ObjectId;
-
 
 db.on('error', console.error.bind(console, 'Erro ao conectar no banco de dados'));
 
@@ -34,10 +32,10 @@ db.once('open', function(){
     conservation: String,
     images: [String],
     evaluates: {
-      user_likes: [ObjectId],
+      user_likes: [String],
       comments: [
         {
-          user_id: ObjectId,
+          user_id: String,
           date: Date,
           text: String
         }

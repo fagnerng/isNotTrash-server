@@ -7,9 +7,9 @@ var validator = require('validator');
 
 /*Implementa método GET para recuperar todas as promoções*/
 router.post('/', function(req, res){
-    var params = url.parse(req.url, true).query;
+    var email = socket.decoded;
 
-    promotionController.all(req.body.user_id,
+    promotionController.all(email,
         function(resp) {
             res.json(resp);
         }
@@ -21,29 +21,29 @@ router.post('/morePromotions', function(req, res){
 
     var skip = parseInt(validator.trim(validator.escape(req.body.skip)));
     var limit = parseInt(validator.trim(validator.escape(req.body.limit)));
-    var user_id = validator.trim(validator.escape(req.body.user_id));
+    var email = socket.decoded;
 
-    promotionController.listByPage(user_id, skip, limit,
+    promotionController.listByPage(email, skip, limit,
         function(resp) {
             res.json(resp);
         }
-    )
+    );
 });
 
 /*Implementa serviço de requisição de produtos por página e por tamanho de página. Fazer acontecer com webScoket*/
 router.post('/newPromotions', function(req, res){
 
     var first = validator.trim(validator.escape(req.body.first));
-    var user_id = validator.trim(validator.escape(req.body.user_id));
+    var email = validator.trim(validator.escape(socket.decoded));
 
     if(!first){
-        promotionController.all(user_id,
+        promotionController.all(email,
             function(resp) {
                 res.json(resp);
             }
         );
     } else {
-        promotionController.listNewPromotions(user_id, first,
+        promotionController.listNewPromotions(email, first,
             function(resp) {
                 res.json(resp);
             }
@@ -53,11 +53,11 @@ router.post('/newPromotions', function(req, res){
 
 router.post('/addPromotion', function(req, res){
     var json = url.parse(req.url, true).query;
-    promotionController.addPromotion(json).then(function(resp){
-        res.json(resp);
-    }).catch(function(error){
-        console.log(error);
-    });
+    promotionController.addPromotion(json,
+        function(resp){
+            res.json(resp);
+        }
+    );
 });
 
 module.exports = router;
