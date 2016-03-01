@@ -60,4 +60,13 @@ router.post('/addPromotion', function(req, res){
     );
 });
 
+router.post('/comments', function(req, res){
+    var json = url.parse(req.url, true).query;
+    promotionController.getComments(json,
+        function(resp){
+            res.json(resp);
+        }
+    );
+});
+
 module.exports = router;

@@ -135,8 +135,9 @@ exports.addComment = function(id, comment, callback){
 
 };
 
-exports.getComments = function(promotion_id, callback){
-	var queryFind = db.promotions.find({_id: promotion_id});
+exports.getComments = function(json, callback){
+
+	var queryFind = db.promotions.find({_id: json.promotion_id});
 
 	queryFind.exec(function(error, result){
 		if(error){
