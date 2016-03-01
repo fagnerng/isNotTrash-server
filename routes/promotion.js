@@ -7,7 +7,7 @@ var validator = require('validator');
 
 /*Implementa método GET para recuperar todas as promoções*/
 router.post('/', function(req, res){
-    var email = socket.decoded;
+    var email = req.decoded;
 
     promotionController.all(email,
         function(resp) {
@@ -21,7 +21,7 @@ router.post('/morePromotions', function(req, res){
 
     var skip = parseInt(validator.trim(validator.escape(req.body.skip)));
     var limit = parseInt(validator.trim(validator.escape(req.body.limit)));
-    var email = socket.decoded;
+    var email = req.decoded;
 
     promotionController.listByPage(email, skip, limit,
         function(resp) {
@@ -34,7 +34,7 @@ router.post('/morePromotions', function(req, res){
 router.post('/newPromotions', function(req, res){
 
     var first = validator.trim(validator.escape(req.body.first));
-    var email = validator.trim(validator.escape(socket.decoded));
+    var email = validator.trim(validator.escape(req.decoded));
 
     if(!first){
         promotionController.all(email,
