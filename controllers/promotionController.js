@@ -11,7 +11,6 @@ exports.all = function(email, callback){
 			callback(generateResponse(email, promotions));
 		}
 	});
-
 };
 
 /*exports.listByExpiration = function(params){
@@ -65,8 +64,6 @@ exports.listNewPromotions = function(email, firstId, callback){
 			callback(generateResponse(email, promotions));
 		}
 	});
-
-
 };
 
 exports.addLike = function(params, callback){
@@ -110,7 +107,6 @@ exports.removeLike = function(params, callback){
 			callback(document);
 		}
 	});
-
 };
 
 exports.addComment = function(id, comment, callback){
@@ -147,7 +143,6 @@ exports.getComments = function(json, callback){
 			callback(result.evaluates.comments);
 		}
 	});
-
 };
 
 exports.addPromotion = function(json, callback){

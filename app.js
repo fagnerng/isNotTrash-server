@@ -3,6 +3,7 @@ var index = require('./routes/index.js');
 var promotionRoutes = require('./routes/promotion.js');
 var usersRoutes = require('./routes/user');
 var loginRoutes = require('./routes/login');
+var scriptSendEmail = require('./script/sendEmail.js');
 
 //Rotas sem auth
 app.use('/', index);

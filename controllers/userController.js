@@ -3,7 +3,7 @@ var db = require('../config/db_config.js');
 exports.list = function(callback){
     db.User.find({}, function(error, users) {
         if(error) {
-            callback({error: 'Não foi possivel retornar os usuarios'});
+            callback({error: 'Não foi possivel retornar os usuários'});
         } else {
             callback(users);
         }
@@ -14,7 +14,7 @@ exports.list = function(callback){
 exports.user = function(id, callback) {
     db.User.findById(id, function(error, user) {
         if(error) {
-            callback({error: 'Não foi possivel retornar o usuario'});
+            callback({error: 'Não foi possivel retornar o usuário'});
         } else {
             callback(user);
         }
@@ -22,25 +22,31 @@ exports.user = function(id, callback) {
 };
 
 exports.save = function(name, email, password, phone, callback){
-    new db.User({
-        'name': name,
-        'email': email,
-        'password': password,
-        'phone': phone
-    }).save(function(error, user) {
-        if(error) {
-            callback({error: 'Não foi possivel salvar o usuario'});
-        } else {
-            callback(user);
-        }
-    });
+    this.verificaEmail(email).then(function(permicao){
+      if(permicao){  
+        new db.User({
+            'name': name,
+            'email': email,
+            'password': password,
+            'phone': phone
+        }).save(function(error, user) {
+            if(error) {
+                callback({error: 'Não foi possível salvar o usuário'});
+            } else {
+                callback(user);
+            }
+        });
+    }else{
+        callback({error: 'E-mail já cadastrado.'});
+    }
+  });     
 };
 
 /*id eh necessario?*/
 exports.update = function(id, name, email, password, phone, callback) {
     db.User.findById(id, function(error, user) {
         if(error) {
-            callback({error: 'Não foi possivel atualizar o usuario'});
+            callback({error: 'Não foi possível atualizar o usuário'});
         } else {
             user.name = name;
             user.email = email;
@@ -48,7 +54,7 @@ exports.update = function(id, name, email, password, phone, callback) {
             user.phone = phone;
             user.save(function (error, user) {
                 if (error) {
-                    callback({error: 'Não foi possivel salvar o usuario'});
+                    callback({error: 'Ocorreu um erro na atualização'});
                 } else {
                     callback(user);
                 }
@@ -61,7 +67,7 @@ exports.update = function(id, name, email, password, phone, callback) {
 exports.delete = function(id, callback) {
     db.User.findById(id, function(error, user) {
         if(error) {
-            callback({error: 'Não foi possivel retornar o usuario'});
+            callback({error: 'Não foi possível retornar o usuário'});
         } else {
             user.remove(function(error) {
                 if(!error) {
@@ -72,5 +78,15 @@ exports.delete = function(id, callback) {
     });
 };
 
-
+this.verificaEmail = function(email){
+    return db.User.find({'email':email}).then(function(existUser){
+        if(existUser.length === 0){
+            return true; 
+       } else {
+            return false;
+       }
+    }, function(error){
+        return false;
+    });
+}
 

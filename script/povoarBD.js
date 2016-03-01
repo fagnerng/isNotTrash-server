@@ -1,4 +1,5 @@
 //Conectando ao BD
+//db = connect("mongodb://diego:diego182@ds055495.mongolab.com:55495/savefood");
 db = connect("mongodb://localhost/isnottrash");
 
 //Dropa as coleções do BD

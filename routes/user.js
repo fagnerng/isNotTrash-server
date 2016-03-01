@@ -7,7 +7,11 @@ var validator = require('validator');
 /*Rota que retorna todos os usuários*/
 router.get('/', function(req, res) {
     userController.list(function(resp) {
-        res.json(resp);
+        if(resp.error !== undefined){
+            res.send(resp, 404);
+        } else {
+            res.send(resp, 200);
+        }
     });
 });
 
@@ -16,7 +20,11 @@ router.get('/:id', function(req, res) {
     var id = validator.trim(validator.escape(req.param('id')));
 
     userController.user(id, function(resp) {
-        res.json(resp);
+        if(resp.error !== undefined){
+            res.send(resp, 404);
+        } else {
+            res.send(resp, 200);
+        }
      });
 });
 
@@ -28,7 +36,11 @@ router.post('/', function(req, res) {
     var phone = validator.trim(validator.escape(req.param('phone')));
 
     userController.save(name, email, password,phone, function(resp) {
-        res.json(resp);
+        if(resp.error !== undefined){
+            res.send(resp, 400);
+        } else {
+            res.send(resp, 200);
+        }
     });
 });
 
@@ -39,8 +51,13 @@ router.put('/', function(req, res) {
     var email = validator.trim(validator.escape(req.param('email')));
     var password = validator.trim(validator.escape(req.param('password')));
     var phone = validator.trim(validator.escape(req.param('phone')));
-    userController.update(id, name, email, password,phone, function(resp) {
-        res.json(resp);
+
+    userController.update(id, name, email, password, phone, function(resp) {
+        if(resp.error !== undefined){
+            res.send(resp, 400);
+        } else {
+            res.send(resp, 200);
+        }
     });
 });
 
@@ -48,7 +65,11 @@ router.put('/', function(req, res) {
 router.delete('/:id', function(req, res) {
     var id = validator.trim(validator.escape(req.param('id')));
     userController.delete(id, function(resp) {
-        res.json(resp);
+        if(resp.error !== undefined){
+            res.send(resp, 404);
+        } else {
+            res.send(resp, 200);
+        }
     });
 });
 
