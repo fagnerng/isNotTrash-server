@@ -131,7 +131,22 @@ exports.addComment = function(id, comment, callback){
 
 };
 
-exports.getComments = function(json, callback){
+exports.getOldComments = function(json, callback){
+
+	var queryFind = db.promotions.find({_id: json.promotion_id});
+
+	queryFind.exec(function(error, result){
+		if(error){
+			callback({error: 'Não foi possível recomendar esse item'});
+			console.log(error);
+		}else{
+			callback(result.evaluates.comments);
+		}
+	});
+
+};
+
+exports.getNewComments = function(json, callback){
 
 	var queryFind = db.promotions.find({_id: json.promotion_id});
 

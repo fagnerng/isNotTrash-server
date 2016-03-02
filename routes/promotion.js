@@ -60,13 +60,27 @@ router.post('/addPromotion', function(req, res){
     );
 });
 
-router.post('/comments', function(req, res){
+router.post('/oldComments', function(req, res){
+    var promotion_id = parseInt(validator.trim(validator.escape(req.body.skip)));
+    var skip = parseInt(validator.trim(validator.escape(req.body.skip)));
+    var limit = parseInt(validator.trim(validator.escape(req.body.limit)));
+    promotionController.getComments(promotion_id, skip, limit,
+        function(resp){
+            res.json(resp);
+        }
+    );
+});
+//{user:{}, comment:{}}
+
+router.post('/newComments', function(req, res){
     var json = url.parse(req.url, true).query;
+    //user_id
     promotionController.getComments(json,
         function(resp){
             res.json(resp);
         }
     );
 });
+
 
 module.exports = router;
