@@ -116,7 +116,8 @@ exports.addComment = function(id, comment, callback){
 				_id: id
 			}, {
 				$push: {
-					"evaluates.comments": comment
+					"evaluates.comments": comment,
+					$position: 0
 				}
 			});
 
@@ -132,15 +133,27 @@ exports.addComment = function(id, comment, callback){
 };
 
 exports.getOldComments = function(json, callback){
+	var promotion_id = json.promotion_id;
+	var skip = json.skip;
+	var limit = json.limit;
 
-	var queryFind = db.promotions.find({_id: json.promotion_id});
+	var queryFind = db.promotions.find(
+		{
+			_id: promotion_id
+		},
+		{
+			'evaluates.comments': {
+				$slice: [skip, limit]
+			}
+		}
+	);
 
 	queryFind.exec(function(error, result){
 		if(error){
 			callback({error: 'Não foi possível recomendar esse item'});
 			console.log(error);
 		}else{
-			callback(result.evaluates.comments);
+			callback(result);
 		}
 	});
 
@@ -155,7 +168,11 @@ exports.getNewComments = function(json, callback){
 			callback({error: 'Não foi possível recomendar esse item'});
 			console.log(error);
 		}else{
-			callback(result.evaluates.comments);
+			var comments = result.evaluates.comments;
+			var filteredComments = comments.filter(function(comment) {
+				return comment.date > json.commentDate;
+			});
+			callback(filteredComments);
 		}
 	});
 };

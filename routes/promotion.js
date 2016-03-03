@@ -17,7 +17,7 @@ router.post('/', function(req, res){
 });
 
 /*Implementa serviço de requisição de produtos por página e por tamanho de página.*/
-router.post('/morePromotions', function(req, res){
+router.post('/oldPromotions', function(req, res){
 
     var skip = parseInt(validator.trim(validator.escape(req.body.skip)));
     var limit = parseInt(validator.trim(validator.escape(req.body.limit)));
@@ -61,10 +61,8 @@ router.post('/addPromotion', function(req, res){
 });
 
 router.post('/oldComments', function(req, res){
-    var promotion_id = parseInt(validator.trim(validator.escape(req.body.skip)));
-    var skip = parseInt(validator.trim(validator.escape(req.body.skip)));
-    var limit = parseInt(validator.trim(validator.escape(req.body.limit)));
-    promotionController.getComments(promotion_id, skip, limit,
+    var params = url.parse(req.url, true).query;
+    promotionController.getComments(params,
         function(resp){
             res.json(resp);
         }
@@ -73,9 +71,9 @@ router.post('/oldComments', function(req, res){
 //{user:{}, comment:{}}
 
 router.post('/newComments', function(req, res){
-    var json = url.parse(req.url, true).query;
+    var params = url.parse(req.url, true).query;
     //user_id
-    promotionController.getComments(json,
+    promotionController.getComments(params,
         function(resp){
             res.json(resp);
         }
