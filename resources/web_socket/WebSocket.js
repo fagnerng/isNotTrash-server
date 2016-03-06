@@ -13,11 +13,13 @@ io.on('connection', function(socket){
     console.log('connected');
     jwt.verify(socket.handshake.query.token, config.secret, function(err, decoded) {
         if (err) {
+            console.log('unauthorized');
             return socket.disconnect('unauthorized');
         }
 
         socket.decoded = decoded;
         socket.emit('authenticated');
+        console.log('authenticated');
 
         onEvaluateLikesEvent(socket);
         onEvaluateCommentsEvent(socket);
