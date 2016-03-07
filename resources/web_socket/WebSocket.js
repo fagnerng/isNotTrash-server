@@ -53,7 +53,7 @@ function onEvaluateLikesEvent(socket){
         console.log(socket.client.request.decoded_token);
         var params = {
             promotion_id: validator.trim(validator.escape(req.promotion_id)),
-            email: socket.decoded
+            user_informations: socket.decoded
         };
         promotionController.addLike(params, sendBroadcastUpdateLikes);
     });
@@ -61,7 +61,7 @@ function onEvaluateLikesEvent(socket){
     socket.on('removeLike', function(req){
         var params = {
             promotion_id: validator.trim(validator.escape(req.promotion_id)),
-            email: socket.decoded
+            user_informations: socket.decoded
         };
         promotionController.removeLike(params, sendBroadcastUpdateLikes);
         
@@ -71,12 +71,7 @@ function onEvaluateLikesEvent(socket){
 /*Add comment events*/
 function onEvaluateCommentsEvent(socket){
     socket.on('addComment', function(req){
-        var promotion_id = validator.trim(validator.escape(req.promotion_id));
-        var comment = req.comment;
-        comment.user_id = socket.decoded;
-        promotionController.addComment(promotion_id, comment, function(response){
-            socket.broadcast.emit('updateComments', {comment: comment});
-        });
+
     });
 }
 

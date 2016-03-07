@@ -32,12 +32,11 @@ router.get('/:id', function(req, res) {
 
 /*Rota que cria um usuário*/
 router.post('/', function(req, res) {
-    var json = url.parse(req.url, true).query;
 
-    var name = validator.trim(validator.escape(json.name));
-    var email = validator.trim(validator.escape(json.email));
-    var password = validator.trim(validator.escape(json.password));
-    var phone = validator.trim(validator.escape(json.phone));
+    var name = validator.trim(validator.escape(req.body.name));
+    var email = validator.trim(validator.escape(req.body.email));
+    var password = validator.trim(validator.escape(req.body.password));
+    var phone = validator.trim(validator.escape(req.body.phone));
 
     userController.save(name, email, password,phone, function(resp) {
         if(resp.error !== undefined){

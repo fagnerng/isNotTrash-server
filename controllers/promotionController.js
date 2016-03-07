@@ -36,7 +36,7 @@ exports.all = function(email, callback){
 	});
 };*/
 
-exports.listByPage = function(email, skip, limit, callback){
+exports.listByPage = function(skip, limit, user_id, callback){
 	var promotions = db.promotions.find().
 	sort({_id: -1}).
 	skip(skip).
@@ -46,13 +46,12 @@ exports.listByPage = function(email, skip, limit, callback){
 		if(error){
 			callback({error: 'Não foi possível novas promoçoes'});
 		}else{
-			callback(generateResponse(email, promotions));
+			callback(generateResponse(user_id, promotions));
 		}
 	});
-
 };
 
-exports.listNewPromotions = function(email, firstId, callback){
+exports.listNewPromotions = function(firstId, id, callback){
 	var objectId = mongoose.Types.ObjectId(firstId);
 	var findQuery = db.promotions.find({_id: {$gt: objectId, $ne: firstId}}).sort({_id :-1});
 
@@ -61,18 +60,18 @@ exports.listNewPromotions = function(email, firstId, callback){
 			callback({error: 'Não foi possível novas promoçoes'});
 			console.log(error);
 		}else{
-			callback(generateResponse(email, promotions));
+			callback(generateResponse(_id, promotions));
 		}
 	});
 };
 
 exports.addLike = function(params, callback){
-	var email = params.email;
+	var id = params.user_informations._id;
 	var updateQuery = db.promotions.findOneAndUpdate(
 		{_id : params.promotion_id},
 		{
 			$push: {
-				'evaluates.user_likes': email
+				'evaluates.user_likes': id
 			}
 		},
 		{new: true}
@@ -89,7 +88,7 @@ exports.addLike = function(params, callback){
 };
 
 exports.removeLike = function(params, callback){
-	var email = params.email;
+	var email = params.user_informations._id;
 	var updateQuery = db.promotions.findOneAndUpdate(
 		{_id : params.promotion_id},
 		{
@@ -112,14 +111,16 @@ exports.removeLike = function(params, callback){
 exports.addComment = function(id, comment, callback){
 	//refatorar usando promises
 	var updateQuery = db.promotions.update(
-			{
-				_id: id
-			}, {
-				$push: {
-					"evaluates.comments": comment,
-					$position: 0
-				}
-			});
+		{
+			_id: id
+		}, {
+			$push: {
+				"evaluates.comments": comment,
+				$position: 0
+			}
+		},
+		{new: true}
+	);
 
 		updateQuery.exec(function(error, result){
 			if(error){
@@ -132,37 +133,67 @@ exports.addComment = function(id, comment, callback){
 
 };
 
-exports.getOldComments = function(json, callback){
-	var promotion_id = json.promotion_id;
-	var skip = json.skip;
-	var limit = json.limit;
+exports.getOldComments = function(skip, limit, promotion_id, callback){
+	db.promotions.findOne(
+		{_id: promotion_id},
+		{
+			'evaluates.comments': {
+			$slice: [parseInt(skip), parseInt(limit)]
+		}
+	}).populate('evaluates.comments._user', '-password').
+	exec(function(error, result){
+		callback(result.evaluates.comments);
+	});
 
-	var queryFind = db.promotions.find(
+	/*var queryFind = db.promotions.find(
 		{
 			_id: promotion_id
 		},
 		{
 			'evaluates.comments': {
-				$slice: [skip, limit]
+				$slice: [parseInt(skip), parseInt(limit)]
 			}
 		}
 	);
 
 	queryFind.exec(function(error, result){
 		if(error){
-			callback({error: 'Não foi possível recomendar esse item'});
+			callback({error: 'Não foi possível recuperar o histórico de comentários'});
 			console.log(error);
 		}else{
-			callback(result);
+			return result[0].evaluates.comments;
 		}
-	});
+	}).exec(function(error, comments){
+		var expressions = [];
+		for(var i in comments){
+			expressions.push({email: comments[i].email});
+		}
+		var queryFind = db.users.find({
+			$or: expressions
+		});
+	}).exec(function(error, json){
+
+
+		for(var c in comments){
+			for(var u in users){
+
+			}
+		}
+
+		for(var i = 0; i < comments.length; i++){
+			var search = {email: comments[i].user_id};
+			var queryFind = db.users.find(search);
+			queryFind.exec(function(error, user){
+				comments[i].userInformations = {name:user.name, email: user.email, phone: user.phone};
+				commentsResult.push(comments[i]);
+			});
+		}
+	});*/
 
 };
 
 exports.getNewComments = function(json, callback){
-
 	var queryFind = db.promotions.find({_id: json.promotion_id});
-
 	queryFind.exec(function(error, result){
 		if(error){
 			callback({error: 'Não foi possível recomendar esse item'});
@@ -189,7 +220,10 @@ exports.addPromotion = function(json, callback){
 	});
 };
 
-function generateResponse(email, promotions){
+/*function generateCommentJson(comments, callback){
+}*/
+
+function generateResponse(user_id, promotions){
 	var response = [];
 	for(var key in promotions){
 		var doc = promotions[key];
@@ -207,7 +241,7 @@ function generateResponse(email, promotions){
 		};
 
 		var user_likes = promotions[key].evaluates.user_likes;
-		if(user_likes.indexOf(email) > -1){
+		if(user_likes.indexOf(user_id) > -1){
 			item.like = true;
 		}
 		item.likes = user_likes.length;

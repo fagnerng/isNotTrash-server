@@ -1,7 +1,7 @@
 var db = require('../config/db_config.js');
 
 exports.list = function(callback){
-    db.User.find({}, function(error, users) {
+    db.users.find({}, function(error, users) {
         if(error) {
             callback({error: 'Não foi possivel retornar os usuários'});
         } else {
@@ -12,7 +12,7 @@ exports.list = function(callback){
 
 /*id ou name*/
 exports.user = function(id, callback) {
-    db.User.findById(id, function(error, user) {
+    db.users.findById(id, function(error, user) {
         if(error) {
             callback({error: 'Não foi possivel retornar o usuário'});
         } else {
@@ -24,7 +24,7 @@ exports.user = function(id, callback) {
 exports.save = function(name, email, password, phone, callback){
     this.verificaEmail(email).then(function(permicao){
       if(permicao){  
-        new db.User({
+        new db.users({
             'name': name,
             'email': email,
             'password': password,
@@ -44,7 +44,7 @@ exports.save = function(name, email, password, phone, callback){
 
 /*id eh necessario?*/
 exports.update = function(id, name, email, password, phone, callback) {
-    db.User.findById(id, function(error, user) {
+    db.users.findById(id, function(error, user) {
         if(error) {
             callback({error: 'Não foi possível atualizar o usuário'});
         } else {
@@ -65,7 +65,7 @@ exports.update = function(id, name, email, password, phone, callback) {
 
 /*id ou name*/
 exports.delete = function(id, callback) {
-    db.User.findById(id, function(error, user) {
+    db.users.findById(id, function(error, user) {
         if(error) {
             callback({error: 'Não foi possível retornar o usuário'});
         } else {
@@ -79,7 +79,7 @@ exports.delete = function(id, callback) {
 };
 
 this.verificaEmail = function(email){
-    return db.User.find({'email':email}).then(function(existUser){
+    return db.users.find({'email':email}).then(function(existUser){
         if(existUser.length === 0){
             return true; 
        } else {

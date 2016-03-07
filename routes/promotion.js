@@ -1,6 +1,5 @@
 var express = require('express');
 var router = express.Router();
-var url = require('url');
 
 var promotionController = require('../controllers/promotionController.js');
 var validator = require('validator');
@@ -21,9 +20,9 @@ router.post('/oldPromotions', function(req, res){
 
     var skip = parseInt(validator.trim(validator.escape(req.body.skip)));
     var limit = parseInt(validator.trim(validator.escape(req.body.limit)));
-    var email = req.decoded;
+    var user_id = req.decoded._id;
 
-    promotionController.listByPage(email, skip, limit,
+    promotionController.listByPage(skip, limit, user_id,
         function(resp) {
             res.json(resp);
         }
@@ -34,7 +33,7 @@ router.post('/oldPromotions', function(req, res){
 router.post('/newPromotions', function(req, res){
 
     var first = validator.trim(validator.escape(req.body.first));
-    var email = validator.trim(validator.escape(req.decoded));
+    var user_id = validator.trim(validator.escape(req.decoded._id));
 
     if(!first){
         promotionController.all(email,
@@ -43,7 +42,7 @@ router.post('/newPromotions', function(req, res){
             }
         );
     } else {
-        promotionController.listNewPromotions(email, first,
+        promotionController.listNewPromotions(first, user_id,
             function(resp) {
                 res.json(resp);
             }
@@ -52,8 +51,12 @@ router.post('/newPromotions', function(req, res){
 });
 
 router.post('/addPromotion', function(req, res){
-    var json = url.parse(req.url, true).query;
-    promotionController.addPromotion(json,
+
+    var promotion_id = validator.trim(validator.escape(req.body.promotion_id));
+    var text = validator.trim(validator.escape(req.body.text));
+    var email = req.body.first;
+
+    promotionController.addPromotion(req.body,
         function(resp){
             res.json(resp);
         }
@@ -61,8 +64,10 @@ router.post('/addPromotion', function(req, res){
 });
 
 router.post('/oldComments', function(req, res){
-    var params = url.parse(req.url, true).query;
-    promotionController.getComments(params,
+    var skip = validator.trim(validator.escape(req.body.skip));
+    var limit = validator.trim(validator.escape(req.body.limit));
+    var promotion_id = validator.trim(validator.escape(req.body.promotion_id));
+    promotionController.getOldComments(skip, limit, promotion_id,
         function(resp){
             res.json(resp);
         }
@@ -71,9 +76,21 @@ router.post('/oldComments', function(req, res){
 //{user:{}, comment:{}}
 
 router.post('/newComments', function(req, res){
-    var params = url.parse(req.url, true).query;
-    //user_id
-    promotionController.getComments(params,
+    var promotion_id = validator.trim(validator.escape(req.body.promotion_id));
+    var commentDate = validator.trim(validator.escape(req.body.comment_date));
+
+    promotionController.getNewComments(promotion_id, commentDate,
+        function(resp){
+            res.json(resp);
+        }
+    );
+});
+
+router.post('/addComment', function(req, res){
+    var promotion_id = validator.trim(validator.escape(req.body.promotion_id));
+    var comment = req.body.comment;
+    comment._user = req.decoded._id;
+    promotionController.addComment(promotion_id, comment,
         function(resp){
             res.json(resp);
         }
