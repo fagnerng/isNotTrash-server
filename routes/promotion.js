@@ -4,6 +4,9 @@ var router = express.Router();
 var promotionController = require('../controllers/promotionController.js');
 var validator = require('validator');
 
+const DEFAULT_SKIP = 0;
+const DEFAULT_LIMIT = 10;
+
 /*Implementa método GET para recuperar todas as promoções*/
 router.post('/', function(req, res){
     var email = req.decoded;
@@ -36,7 +39,7 @@ router.post('/newPromotions', function(req, res){
     var user_id = validator.trim(validator.escape(req.decoded._id));
 
     if(!first){
-        promotionController.all(email,
+        promotionController.all(user_id,
             function(resp) {
                 res.json(resp);
             }
@@ -77,13 +80,21 @@ router.post('/oldComments', function(req, res){
 
 router.post('/newComments', function(req, res){
     var promotion_id = validator.trim(validator.escape(req.body.promotion_id));
-    var commentDate = validator.trim(validator.escape(req.body.comment_date));
+    var comment_date = validator.trim(validator.escape(req.body.comment_date));
+    if(!comment_date){
+        promotionController.getOldComments(DEFAULT_SKIP, DEFAULT_LIMIT, promotion_id,
+            function(resp){
+                res.json(resp);
+            }
+        );
+    } else {
+        promotionController.getNewComments(promotion_id, comment_date,
+            function(resp){
+                res.json(resp);
+            }
+        );
+    }
 
-    promotionController.getNewComments(promotion_id, commentDate,
-        function(resp){
-            res.json(resp);
-        }
-    );
 });
 
 router.post('/addComment', function(req, res){

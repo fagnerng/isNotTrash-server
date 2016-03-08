@@ -2,13 +2,13 @@ var db = require('../config/db_config.js');
 var mongoose = require('mongoose');
 var timeout = require('../resources/timeout/timeout.js');
 
-exports.all = function(email, callback){
+exports.all = function(user_id, callback){
 	var findQuery = db.promotions.find().sort({_id: -1});
 	findQuery.exec(function(err, promotions){
 		if (err) {
 			callback({error: 'Não foi possível encontrar promoções'});
 		} else {
-			callback(generateResponse(email, promotions));
+			callback(generateResponse(user_id, promotions));
 		}
 	});
 };
@@ -51,16 +51,16 @@ exports.listByPage = function(skip, limit, user_id, callback){
 	});
 };
 
-exports.listNewPromotions = function(firstId, id, callback){
-	var objectId = mongoose.Types.ObjectId(firstId);
-	var findQuery = db.promotions.find({_id: {$gt: objectId, $ne: firstId}}).sort({_id :-1});
+exports.listNewPromotions = function(firstPromotionId, user_id, callback){
+	var objectId = mongoose.Types.ObjectId(firstPromotionId);
+	var findQuery = db.promotions.find({_id: {$gt: objectId, $ne: firstPromotionId}}).sort({_id :-1});
 
 	findQuery.exec(function(error, promotions){
 		if(error){
 			callback({error: 'Não foi possível novas promoçoes'});
 			console.log(error);
 		}else{
-			callback(generateResponse(_id, promotions));
+			callback(generateResponse(user_id, promotions));
 		}
 	});
 };
@@ -88,12 +88,12 @@ exports.addLike = function(params, callback){
 };
 
 exports.removeLike = function(params, callback){
-	var email = params.user_informations._id;
+	var user_id = params.user_informations._id;
 	var updateQuery = db.promotions.findOneAndUpdate(
 		{_id : params.promotion_id},
 		{
 			$pull: {
-				'evaluates.user_likes': email
+				'evaluates.user_likes': user_id
 			}
 		},
 		{new: true}
@@ -115,8 +115,10 @@ exports.addComment = function(id, comment, callback){
 			_id: id
 		}, {
 			$push: {
-				"evaluates.comments": comment,
-				$position: 0
+				"evaluates.comments": {
+					$each: [comment],
+					$position: 0
+				},
 			}
 		},
 		{new: true}
@@ -138,8 +140,8 @@ exports.getOldComments = function(skip, limit, promotion_id, callback){
 		{_id: promotion_id},
 		{
 			'evaluates.comments': {
-			$slice: [parseInt(skip), parseInt(limit)]
-		}
+				$slice: [parseInt(skip), parseInt(limit)]
+			}
 	}).populate('evaluates.comments._user', '-password').
 	exec(function(error, result){
 		callback(result.evaluates.comments);
@@ -192,16 +194,17 @@ exports.getOldComments = function(skip, limit, promotion_id, callback){
 
 };
 
-exports.getNewComments = function(json, callback){
-	var queryFind = db.promotions.find({_id: json.promotion_id});
-	queryFind.exec(function(error, result){
+exports.getNewComments = function(promotion_id, commentDate, callback){
+	var objectId = mongoose.Types.ObjectId(promotion_id);
+	var queryFind = db.promotions.findOne({_id: objectId});
+	queryFind.populate('evaluates.comments._user', '-password').exec(function(error, result){
 		if(error){
 			callback({error: 'Não foi possível recomendar esse item'});
 			console.log(error);
 		}else{
 			var comments = result.evaluates.comments;
 			var filteredComments = comments.filter(function(comment) {
-				return comment.date > json.commentDate;
+				return new Date(comment.date) >  new Date(commentDate);
 			});
 			callback(filteredComments);
 		}
