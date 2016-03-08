@@ -37,7 +37,7 @@ exports.save = function(name, email, password, phone, callback){
             }
         });
     }else{
-        callback({error: 'E-mail já cadastrado.'});
+        callback({error: 'E-mail já cadastrado. Por favor insira outro e-mail'});
     }
   });     
 };

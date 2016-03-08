@@ -11,12 +11,12 @@ var config = require('../../config/config.js');
 
 io.on('connection', function(socket){
     console.log('connected');
-    jwt.verify(socket.handshake.query.token, config.secret, function(err, decoded) {
+    jwt.verify(socket.handshake.query.token, config.secret, function(err, userInformations) {
         if (err) {
             return socket.disconnect('unauthorized');
         }
 
-        socket.decoded = decoded;
+        socket.userInformations = userInformations;
         socket.emit('authenticated');
 
         onEvaluateLikesEvent(socket);
@@ -50,10 +50,9 @@ function onEvaluateLikesEvent(socket){
     }
 
     socket.on('addLike', function(req){
-        console.log(socket.client.request.decoded_token);
         var params = {
             promotion_id: validator.trim(validator.escape(req.promotion_id)),
-            user_informations: socket.decoded
+            user_informations: socket.userInformations
         };
         promotionController.addLike(params, sendBroadcastUpdateLikes);
     });
@@ -61,10 +60,21 @@ function onEvaluateLikesEvent(socket){
     socket.on('removeLike', function(req){
         var params = {
             promotion_id: validator.trim(validator.escape(req.promotion_id)),
-            user_informations: socket.decoded
+            user_informations: socket.userInformations
         };
         promotionController.removeLike(params, sendBroadcastUpdateLikes);
         
+    });
+
+    socket.on('addComment', function(req){
+        var promotion_id = validator.trim(validator.escape(req.body.promotion_id));
+        var comment = req.body.comment;
+        comment._user = socket.userInformations._id;
+        promotionController.addComment(promotion_id, comment,
+            function(resp){
+                res.json(resp);
+            }
+        );
     });
 }
 

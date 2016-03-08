@@ -108,7 +108,7 @@ exports.removeLike = function(params, callback){
 	});
 };
 
-exports.addComment = function(id, comment, callback){
+exports.addComment = function(id, comment, callback, error){
 	//refatorar usando promises
 	var updateQuery = db.promotions.update(
 		{
@@ -126,7 +126,7 @@ exports.addComment = function(id, comment, callback){
 
 		updateQuery.exec(function(error, result){
 			if(error){
-				callback({error: 'Não foi possível recomendar esse item'});
+				error({error: 'Não foi possível recomendar esse item'});
 				console.log(error);
 			}else{
 				callback(result);

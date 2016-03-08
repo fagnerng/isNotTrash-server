@@ -9,9 +9,9 @@ const DEFAULT_LIMIT = 10;
 
 /*Implementa método GET para recuperar todas as promoções*/
 router.post('/', function(req, res){
-    var email = req.decoded;
+    var user_id = req.userInformations._id;
 
-    promotionController.all(email,
+    promotionController.all(user_id,
         function(resp) {
             res.json(resp);
         }
@@ -23,7 +23,7 @@ router.post('/oldPromotions', function(req, res){
 
     var skip = parseInt(validator.trim(validator.escape(req.body.skip)));
     var limit = parseInt(validator.trim(validator.escape(req.body.limit)));
-    var user_id = req.decoded._id;
+    var user_id = req.userInformations._id;
 
     promotionController.listByPage(skip, limit, user_id,
         function(resp) {
@@ -36,7 +36,7 @@ router.post('/oldPromotions', function(req, res){
 router.post('/newPromotions', function(req, res){
 
     var first = validator.trim(validator.escape(req.body.first));
-    var user_id = validator.trim(validator.escape(req.decoded._id));
+    var user_id = validator.trim(validator.escape(req.userInformations._id));
 
     if(!first){
         promotionController.all(user_id,
@@ -100,7 +100,7 @@ router.post('/newComments', function(req, res){
 router.post('/addComment', function(req, res){
     var promotion_id = validator.trim(validator.escape(req.body.promotion_id));
     var comment = req.body.comment;
-    comment._user = req.decoded._id;
+    comment._user = req.userInformations._id;
     promotionController.addComment(promotion_id, comment,
         function(resp){
             res.json(resp);
