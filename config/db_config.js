@@ -61,7 +61,10 @@ var userSchema = mongoose.Schema({
   phone:{
     type: String,
     unique: true
-  } 
+  },
+  settings:{
+    language: String
+  }
 });
 
 /*Antes de salvar o usuário, usa criptografia na sua senha*/

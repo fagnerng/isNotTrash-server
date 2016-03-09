@@ -44,15 +44,29 @@ router.post('/', function(req, res) {
     });
 });
 
-/*Rota que atualiza um usuário*/
-router.put('/', function(req, res) {
-    var id = validator.trim(validator.escape(req.param('id')));
-    var name = validator.trim(validator.escape(req.param('name')));
+/*Rota que atualiza a senha do usuário*/
+router.put('/setPassword', function(req, res) {
     var email = validator.trim(validator.escape(req.param('email')));
     var password = validator.trim(validator.escape(req.param('password')));
-    var phone = validator.trim(validator.escape(req.param('phone')));
 
-    userController.update(id, name, email, password, phone, function(resp) {
+    userController.setPassord(email,password, function(resp) {
+        if(resp.error !== undefined){
+            res.send(resp, 400);
+        } else {
+            res.send(resp, 200);
+        }
+    });
+});
+
+/*Rota que atualiza os dados do usuário*/
+router.put('/', function(req, res) {
+    var email = validator.trim(validator.escape(req.param('email')));
+    var name = validator.trim(validator.escape(req.param('name')));
+    var newEmail = validator.trim(validator.escape(req.param('newEmail')));
+    var phone = validator.trim(validator.escape(req.param('phone')));
+    var language = validator.trim(validator.escape(req.param('language')));
+
+    userController.update(email, name, newEmail, phone,language, function(resp) {
         if(resp.error !== undefined){
             res.send(resp, 400);
         } else {

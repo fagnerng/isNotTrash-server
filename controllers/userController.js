@@ -22,13 +22,17 @@ exports.user = function(id, callback) {
 };
 
 exports.save = function(name, email, password, phone, callback){
+    var language = 'pt-br';
     this.verificaEmail(email).then(function(permicao){
       if(permicao){  
         new db.User({
             'name': name,
             'email': email,
             'password': password,
-            'phone': phone
+            'phone': phone,
+            'settings': {
+                'language': language
+            }
         }).save(function(error, user) {
             if(error) {
                 callback({error: 'Não foi possível salvar o usuário'});
@@ -42,28 +46,40 @@ exports.save = function(name, email, password, phone, callback){
   });     
 };
 
-/*id eh necessario?*/
-exports.update = function(id, name, email, password, phone, callback) {
-    db.User.findById(id, function(error, user) {
+exports.setPassord = function(email, password, callback) {
+    db.User.update({email: email},{$set:{password: password}}, function(error) {
         if(error) {
             callback({error: 'Não foi possível atualizar o usuário'});
         } else {
-            user.name = name;
-            user.email = email;
-            user.password = password;
-            user.phone = phone;
-            user.save(function (error, user) {
-                if (error) {
-                    callback({error: 'Ocorreu um erro na atualização'});
-                } else {
-                    callback(user);
-                }
-            });
+            callback({sucess: 'Senha atualizada com sucesso'});
         }
     });
 };
 
-/*id ou name*/
+exports.update = function(email, name, newEmail, phone, language, callback) {
+    var data = {};
+    if (name != null && name != "") {
+        data.name = name;
+    }
+    if (newEmail != null && newEmail != "") {
+        data.email = newEmail;
+    }
+    if (phone != null && phone != "") {
+        data.phone = phone;
+    }
+    if (language != null && language != "") {
+        data.language = language;
+    }
+    console.log(data);
+    db.User.update({email:email}, {$set:data}, function(error, user) {
+        if(error) {
+            callback({error: 'Não foi possível atualizar o usuário'});
+        } else {
+            callback({sucess: 'Usuário atualizados com sucesso'});
+        }
+    });
+};
+
 exports.delete = function(id, callback) {
     db.User.findById(id, function(error, user) {
         if(error) {
