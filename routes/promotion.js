@@ -14,7 +14,7 @@ router.post('/', function(req, res){
     promotionController.all(user_id,
         function(resp) {
             res.json(resp);
-        }
+        }, function(exception){}
     );
 });
 
@@ -28,7 +28,7 @@ router.post('/oldPromotions', function(req, res){
     promotionController.listByPage(skip, limit, user_id,
         function(resp) {
             res.json(resp);
-        }
+        }, function(exception){}
     );
 });
 
@@ -42,13 +42,13 @@ router.post('/newPromotions', function(req, res){
         promotionController.all(user_id,
             function(resp) {
                 res.json(resp);
-            }
+            }, function(exception){}
         );
     } else {
         promotionController.listNewPromotions(first, user_id,
             function(resp) {
                 res.json(resp);
-            }
+            }, function(exception){}
         );
     }
 });
@@ -62,7 +62,7 @@ router.post('/addPromotion', function(req, res){
     promotionController.addPromotion(req.body,
         function(resp){
             res.json(resp);
-        }
+        }, function(exception){}
     );
 });
 
@@ -73,10 +73,9 @@ router.post('/oldComments', function(req, res){
     promotionController.getOldComments(skip, limit, promotion_id,
         function(resp){
             res.json(resp);
-        }
+        }, function(exception){}
     );
 });
-//{user:{}, comment:{}}
 
 router.post('/newComments', function(req, res){
     var promotion_id = validator.trim(validator.escape(req.body.promotion_id));
@@ -85,28 +84,15 @@ router.post('/newComments', function(req, res){
         promotionController.getOldComments(DEFAULT_SKIP, DEFAULT_LIMIT, promotion_id,
             function(resp){
                 res.json(resp);
-            }
+            }, function(exception){}
         );
     } else {
         promotionController.getNewComments(promotion_id, comment_date,
             function(resp){
                 res.json(resp);
-            }
+            }, function(exception){}
         );
     }
-
 });
-
-router.post('/addComment', function(req, res){
-    var promotion_id = validator.trim(validator.escape(req.body.promotion_id));
-    var comment = req.body.comment;
-    comment._user = req.userInformations._id;
-    promotionController.addComment(promotion_id, comment,
-        function(resp){
-            res.json(resp);
-        }
-    );
-});
-
 
 module.exports = router;

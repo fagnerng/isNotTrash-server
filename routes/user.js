@@ -7,13 +7,13 @@ var url = require('url');
 
 /*Rota que retorna todos os usuários*/
 router.get('/', function(req, res) {
-    userController.list(function(resp) {
-        if(resp.error !== undefined){
-            res.send(resp, 404);
-        } else {
+    userController.list(
+        function(resp) {
             res.send(resp, 200);
+        }, function(exception){
+            res.send(exception, 404);
         }
-    });
+    );
 });
 
 /*Rota que retorna o usuário específico*/
@@ -21,13 +21,14 @@ router.get('/:id', function(req, res) {
     var json = url.parse(req.url, true).query;
     var id = validator.trim(validator.escape(json.id));
 
-    userController.user(id, function(resp) {
-        if(resp.error !== undefined){
-            res.send(resp, 404);
-        } else {
+    userController.user(id,
+        function(resp) {
             res.send(resp, 200);
+        },
+        function(exception) {
+            res.send(exception, 404);
         }
-     });
+    );
 });
 
 /*Rota que cria um usuário*/
@@ -39,12 +40,11 @@ router.post('/', function(req, res) {
     var phone = validator.trim(validator.escape(req.body.phone));
 
     userController.save(name, email, password,phone, function(resp) {
-        if(resp.error !== undefined){
-            res.send(resp, 400);
-        } else {
             res.send(resp, 200);
+        }, function(exception){
+            res.send(exception, 400);
         }
-    });
+    );
 });
 
 /*Rota que atualiza um usuário*/
@@ -57,13 +57,13 @@ router.put('/', function(req, res) {
     var password = validator.trim(validator.escape(json.password));
     var phone = validator.trim(validator.escape(json.phone));
 
-    userController.update(id, name, email, password, phone, function(resp) {
-        if(resp.error !== undefined){
-            res.send(resp, 400);
-        } else {
+    userController.update(id, name, email, password, phone,
+        function(resp) {
             res.send(resp, 200);
+        }, function(exception){
+            res.send(exception, 400);
         }
-    });
+    );
 });
 
 /*Rota que deleta um usuário*/
@@ -72,12 +72,11 @@ router.delete('/:id', function(req, res) {
 
     var id = validator.trim(validator.escape(json.id));
     userController.delete(id, function(resp) {
-        if(resp.error !== undefined){
-            res.send(resp, 404);
-        } else {
             res.send(resp, 200);
+        }, function(exception){
+            res.send(exception, 404);
         }
-    });
+    );
 });
 
 module.exports = router;
