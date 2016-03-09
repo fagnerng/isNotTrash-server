@@ -1,31 +1,31 @@
 var db = require('../config/db_config.js');
 
-exports.list = function(callback){
-    db.User.find({}, function(error, users) {
+exports.list = function(resolve, reject){
+    db.users.find({}, function(error, users) {
         if(error) {
-            callback({error: 'Não foi possivel retornar os usuários'});
+            reject({error: 'Não foi possivel retornar os usuários'});
         } else {
-            callback(users);
+            resolve(users);
         }
     });
 };
 
 /*id ou name*/
-exports.user = function(id, callback) {
-    db.User.findById(id, function(error, user) {
+exports.user = function(id, resolve, reject) {
+    db.users.findById(id, function(error, user) {
         if(error) {
-            callback({error: 'Não foi possivel retornar o usuário'});
+            reject({error: 'Não foi possivel retornar o usuário'});
         } else {
-            callback(user);
+            resolve(user);
         }
     });
 };
 
-exports.save = function(name, email, password, phone, callback){
+exports.save = function(name, email, password, phone, resolve, reject){
     var language = 'pt-br';
     this.verificaEmail(email).then(function(permicao){
-      if(permicao){  
-        new db.User({
+    if(permicao){
+        new db.users({
             'name': name,
             'email': email,
             'password': password,
@@ -35,28 +35,39 @@ exports.save = function(name, email, password, phone, callback){
             }
         }).save(function(error, user) {
             if(error) {
-                callback({error: 'Não foi possível salvar o usuário'});
+                reject({error: 'Não foi possível salvar o usuário'});
             } else {
-                callback(user);
+                resolve(user);
             }
         });
     }else{
-        callback({error: 'E-mail já cadastrado.'});
+        reject({error: 'E-mail já cadastrado. Por favor insira outro e-mail'});
     }
   });     
 };
 
-exports.setPassord = function(email, password, callback) {
+exports.setPassord = function(email, password, resolve, reject) {
     db.User.update({email: email},{$set:{password: password}}, function(error) {
+
         if(error) {
-            callback({error: 'Não foi possível atualizar o usuário'});
+            reject({error: 'Não foi possível atualizar o usuário'});
         } else {
-            callback({sucess: 'Senha atualizada com sucesso'});
+            resolve({sucess: 'Senha atualizada com sucesso'});
+        }
+    });
+};
+/*id eh necessario?*/
+exports.update = function(id, name, email, password, phone, resolve, reject) {
+    db.users.findById(id, function(error) {
+        if(error) {
+            reject({error: 'Não foi possível atualizar o usuário'});
+        } else {
+            resolve({sucess: 'Senha atualizada com sucesso'});
         }
     });
 };
 
-exports.update = function(email, name, newEmail, phone, language, callback) {
+exports.update = function(email, name, newEmail, phone, language, resolve, reject) {
     var data = {};
     if (name != null && name != "") {
         data.name = name;
@@ -73,21 +84,33 @@ exports.update = function(email, name, newEmail, phone, language, callback) {
     console.log(data);
     db.User.update({email:email}, {$set:data}, function(error, user) {
         if(error) {
-            callback({error: 'Não foi possível atualizar o usuário'});
+            reject({error: 'Não foi possível atualizar o usuário'});
         } else {
-            callback({sucess: 'Usuário atualizados com sucesso'});
+            resolve({sucess: 'Usuário atualizados com sucesso'});
+            user.name = name;
+            user.email = email;
+            user.password = password;
+            user.phone = phone;
+            user.save(function (error, user) {
+                if (error) {
+                    reject({error: 'Ocorreu um erro na atualização'});
+                } else {
+                    resolve(user);
+                }
+            });
         }
     });
 };
 
-exports.delete = function(id, callback) {
-    db.User.findById(id, function(error, user) {
+/*id ou name*/
+exports.delete = function(id, resolve, reject) {
+    db.users.findById(id, function(error, user) {
         if(error) {
-            callback({error: 'Não foi possível retornar o usuário'});
+            reject({error: 'Não foi possível retornar o usuário'});
         } else {
             user.remove(function(error) {
                 if(!error) {
-                    callback({response: 'Usuário excluido com sucesso'});
+                    resolve({response: 'Usuário excluído com sucesso'});
                 }
             });
         }
@@ -95,14 +118,14 @@ exports.delete = function(id, callback) {
 };
 
 this.verificaEmail = function(email){
-    return db.User.find({'email':email}).then(function(existUser){
-        if(existUser.length === 0){
-            return true; 
-       } else {
-            return false;
-       }
-    }, function(error){
+    return db.users.find({'email':email}).then(function(existUser){
+    if(existUser.length === 0){
+        return true;
+    } else {
+        return false;
+    }
+    }, function(){
         return false;
     });
-}
+};
 

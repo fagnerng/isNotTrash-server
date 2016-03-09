@@ -194,8 +194,8 @@ var promotions =
  likes: Number,
  comments: []
  }
- }*/
-];
+ }
+];*/
 
 
 
@@ -322,4 +322,3 @@ var promotions =
  }
  }*/
 ];
-* */

@@ -32,10 +32,10 @@ db.once('open', function(){
     conservation: String,
     images: [String],
     evaluates: {
-      user_likes: [String],
+      user_likes: [mongoose.Schema.Types.ObjectId],
       comments: [
         {
-          user_id: String,
+          _user: {type: mongoose.Schema.Types.ObjectId, ref:'Users'},
           date: Date,
           text: String
         }
@@ -95,7 +95,7 @@ userSchema.methods.passwordVerification = function(password, next){
   });
 };
 
-exports.User = mongoose.model('User', userSchema);
-exports.promotions = mongoose.model('promotions', promotionsSchema);
+exports.users = mongoose.model('Users', userSchema);
+exports.promotions = mongoose.model('Promotions', promotionsSchema);
 
 });

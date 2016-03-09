@@ -3,7 +3,7 @@ var db = require('../config/db_config.js');
 var config = require('../config/config.js');
 
 exports.login = function(email, password, callback){
-	db.User.findOne({email:email}, function(err, user){
+	db.users.findOne({email:email}, function(err, user){
   	if(err){
   		callback({
   			success: false,
@@ -17,12 +17,14 @@ exports.login = function(email, password, callback){
   	}else if(user){
   		user.passwordVerification(password, function(ismatch){
   			if(ismatch){
-		      	var token = jwt.sign(user.email, config.secret);
+				var userInformations = {_id:user._id, name:user.name, email: user.email, phone: user.phone};
+		      	var token = jwt.sign(userInformations, config.secret);
   				
   				callback({
 				success: true,
 				msg: 'Logado com sucesso!',
-				token: token
+				token: token,
+				userInformations: userInformations
         		});
   			}else{
   				callback({
