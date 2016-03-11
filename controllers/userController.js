@@ -1,7 +1,9 @@
 var db = require('../config/db_config.js');
 
+var User = require('../models/user.js')
+
 exports.list = function(resolve, reject){
-    db.users.find({}, function(error, users) {
+    User.find({}, function(error, users) {
         if(error) {
             reject({error: 'Não foi possivel retornar os usuários'});
         } else {
@@ -24,7 +26,7 @@ exports.user = function(id, resolve, reject) {
 exports.save = function(name, email, password, phone, resolve, reject){
     this.verificaEmail(email).then(function(permicao){
     if(permicao){
-        new db.users({
+        new User({
             'name': name,
             'email': email,
             'password': password,
@@ -79,7 +81,7 @@ exports.delete = function(id, resolve, reject) {
 };
 
 this.verificaEmail = function(email){
-    return db.users.find({'email':email}).then(function(existUser){
+    return User.find({'email':email}).then(function(existUser){
     if(existUser.length === 0){
         return true;
     } else {

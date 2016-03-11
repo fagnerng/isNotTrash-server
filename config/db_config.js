@@ -1,11 +1,28 @@
-var db_string = 'mongodb://localhost/test';
-
 if(process.env.PORT){
   db_string = 'mongodb://diego:diego182@ds055495.mongolab.com:55495/savefood';
 }
 
-var mongoose = require('mongoose').connect(db_string);
+var mongoose = require('mongoose');
+
 var bcrypt = require('bcrypt-nodejs');
+
+console.log("NODE_ENV: " + process.env.NODE_ENV);
+
+var environment = "" + process.env.NODE_ENV ||'dev';
+
+console.log('environment: ' + environment);
+
+console.log(environment == 'test');
+
+if(environment == 'test'){
+  mongoose.connect('mongodb://localhost/isnottrash-test');
+  console.log("test");
+}else if(environment == 'production'){
+  mongoose.connect('mongodb://localhost/isnottrash');
+  console.log("dev");
+}
+
+mongoose.connect('mongodb://localhost/isnottrash');
 
 var db = mongoose.connection;
 
@@ -43,56 +60,7 @@ db.once('open', function(){
     }
   });
 
-/*Esquema dos Usuários*/
-var userSchema = mongoose.Schema({
-  name: {
-    type: String,
-    required: true
-  },
-  email:{
-    type: String,
-    required: true,
-    unique: true
-  },
-  password: {
-    type: String,
-    required: true
-  },
-  phone:{
-    type: String,
-    unique: true
-  } 
-});
-
-/*Antes de salvar o usuário, usa criptografia na sua senha*/
-userSchema.pre('save', function(next){
-
-  var user = this;
-
-  bcrypt.genSalt(5, function(err, salt) {
-
-    if(err) return next(err);
-
-    bcrypt.hash(user.password, salt, null, function(err, hash) {
-
-      if(err) return next(err);
-
-      user.password = hash;
-
-      next();
-
-    });
-  });
-});
-
-userSchema.methods.passwordVerification = function(password, next){
-  bcrypt.compare(password, this.password, function(err, isMatch){
-    if(err) return next(err);
-    next(isMatch);
-  });
-};
-
-exports.users = mongoose.model('Users', userSchema);
 exports.promotions = mongoose.model('Promotions', promotionsSchema);
 
 });
+

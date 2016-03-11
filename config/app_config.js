@@ -3,6 +3,7 @@ var logger = require('morgan');
 var bodyParser =  require('body-parser');
 
 var app = module.exports = express();
+
 var server = require('http').createServer(app);
 var io = require('../resources/web_socket/WebSocket.js');
 
