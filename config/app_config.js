@@ -1,6 +1,6 @@
-var express =  require('express');
+var express = require('express');
 var logger = require('morgan');
-var bodyParser =  require('body-parser');
+var bodyParser = require('body-parser');
 
 var app = module.exports = express();
 
@@ -17,7 +17,7 @@ server.listen(port, function() {
 
 io.attach(server);
 
-var allowCors = function(req, res, next){
+var allowCors = function(req, res, next) {
 	res.header('Access-Control-Allow-Origin', 'http://localhost:8100');
 	res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE');
 	res.header('Access-Control-Allow-Headers', "Content-Type");
@@ -32,5 +32,5 @@ app.use(logger('dev'));
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
-   extended: true
+	extended: true
 }));

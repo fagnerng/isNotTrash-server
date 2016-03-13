@@ -8,7 +8,7 @@ var userSchema = new Schema({
     type: String,
     required: true
   },
-  email:{
+  email: {
     type: String,
     required: true,
     unique: true
@@ -17,24 +17,24 @@ var userSchema = new Schema({
     type: String,
     required: true
   },
-  phone:{
+  phone: {
     type: String,
     unique: true
-  } 
+  }
 });
 
 /*Antes de salvar o usuário, usa criptografia na sua senha*/
-userSchema.pre('save', function(next){
+userSchema.pre('save', function(next) {
 
   var user = this;
 
   bcrypt.genSalt(5, function(err, salt) {
 
-    if(err) return next(err);
+    if (err) return next(err);
 
     bcrypt.hash(user.password, salt, null, function(err, hash) {
 
-      if(err) return next(err);
+      if (err) return next(err);
 
       user.password = hash;
 
@@ -44,13 +44,11 @@ userSchema.pre('save', function(next){
   });
 });
 
-userSchema.methods.passwordVerification = function(password, next){
-  bcrypt.compare(password, this.password, function(err, isMatch){
-    if(err) return next(err);
+userSchema.methods.passwordVerification = function(password, next) {
+  bcrypt.compare(password, this.password, function(err, isMatch) {
+    if (err) return next(err);
     next(isMatch);
   });
 };
 
-var user = mongoose.model('User', userSchema);
-
-module.exports = user;
+module.exports = mongoose.model('User', userSchema);

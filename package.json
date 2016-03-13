@@ -23,6 +23,7 @@
     "express": "4.13.4",
     "find": "^0.2.4",
     "jsonwebtoken": "^5.7.0",
+    "mocha-mongoose": "^1.1.1",
     "mongoose": "4.2.4",
     "morgan": "1.6.1",
     "mquery": "^1.6.3",
@@ -35,6 +36,7 @@
   },
   "devDependencies": {
     "chai": "^3.5.0",
+    "chai-http": "^2.0.1",
     "mocha": "^2.4.5",
     "should": "^8.2.2",
     "superagent": "^1.7.2",

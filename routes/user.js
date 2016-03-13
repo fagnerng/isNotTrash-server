@@ -6,7 +6,7 @@ var validator = require('validator');
 var url = require('url');
 
 /*Rota que retorna todos os usuários*/
-router.get('/', function(req, res) {
+/*router.get('/', function(req, res) {
     userController.list(
         function(resp) {
             res.send(resp, 200);
@@ -14,19 +14,19 @@ router.get('/', function(req, res) {
             res.send(exception, 404);
         }
     );
-});
+});*/
 
 /*Rota que retorna o usuário específico*/
-router.get('/:id', function(req, res) {
-    var json = url.parse(req.url, true).query;
-    var id = validator.trim(validator.escape(json.id));
+router.get('/', function(req, res) {
 
-    userController.user(id,
+    var query = req.query;
+
+    userController.user(query,
         function(resp) {
-            res.send(resp, 200);
+            res.status(200).send(resp);
         },
         function(exception) {
-            res.send(exception, 404);
+            res.status(404).send(exception);
         }
     );
 });
@@ -39,29 +39,29 @@ router.post('/', function(req, res) {
     var password = validator.trim(validator.escape(req.body.password));
     var phone = validator.trim(validator.escape(req.body.phone));
 
-    userController.save(name, email, password,phone, function(resp) {
-            res.send(resp, 200);
-        }, function(exception){
-            res.send(exception, 400);
-        }
-    );
+    userController.save(name, email, password, phone, function(resp) {
+        res.status(200).send(resp);
+    }, function(exception) {
+        res.status(400).send(exception);
+    });
 });
 
 /*Rota que atualiza um usuário*/
 router.put('/', function(req, res) {
+
     var json = url.parse(req.url, true).query;
 
-    var id = validator.trim(validator.escape(json.id));
-    var name = validator.trim(validator.escape(json.name));
-    var email = validator.trim(validator.escape(json.email));
-    var password = validator.trim(validator.escape(json.password));
-    var phone = validator.trim(validator.escape(json.phone));
+    var name = req.body.name;
+    var email = req.body.email;;
+    var password = req.body.password;
+    var phone = req.body.phone;
 
-    userController.update(id, name, email, password, phone,
+    userController.update(name, email, password, phone,
         function(resp) {
-            res.send(resp, 200);
-        }, function(exception){
-            res.send(exception, 400);
+            res.status(200).send(resp);
+        },
+        function(exception) {
+            res.status(400).send(exception);
         }
     );
 });
@@ -72,11 +72,10 @@ router.delete('/:id', function(req, res) {
 
     var id = validator.trim(validator.escape(json.id));
     userController.delete(id, function(resp) {
-            res.send(resp, 200);
-        }, function(exception){
-            res.send(exception, 404);
-        }
-    );
+        res.status(200).send(resp);
+    }, function(exception) {
+        res.status(404).send(404);
+    });
 });
 
 module.exports = router;

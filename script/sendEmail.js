@@ -6,8 +6,8 @@ var nodemailer = require('nodemailer');
 
 var conta = nodemailer.createTransport({
     service: 'Gmail', // Existem outros services, você pode procurar
-                      // na documentação do nodemailer como utilizar
-                      // os outros serviços
+    // na documentação do nodemailer como utilizar
+    // os outros serviços
     auth: {
         user: 'ygors.dev@gmail.com', // Seu usuário no Gmail
         pass: '280993.developer' // A senha da sua conta no Gmail :-)
@@ -24,16 +24,16 @@ var mailOptions = {
 };
 
 router.post('/', function(req, res) {
-	var email = validator.trim(validator.escape(req.param('email')));
-	mailOptions.to = email;
-	console.log(mailOptions);
-	// send mail with defined transport object
-	conta.sendMail(mailOptions, function(error, info){
-	    if(error){
-	        return res.send(error,500);
-	    }
-	    console.log('Message sent: ' + info.response);
-	});
+    var email = validator.trim(validator.escape(req.param('email')));
+    mailOptions.to = email;
+    console.log(mailOptions);
+    // send mail with defined transport object
+    conta.sendMail(mailOptions, function(error, info) {
+        if (error) {
+            return res.send(error, 500);
+        }
+        console.log('Message sent: ' + info.response);
+    });
 });
 
 module.exports = router;
