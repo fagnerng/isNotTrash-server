@@ -24,7 +24,7 @@ describe("Tetes da rota de Login", () => {
     mongoose.connect(dbURI, done);
   });
 
-  before(function(done) {
+  before((done) => {
     var users = [{
       name: 'Ygor Santos',
       email: 'ygor.gsan@gmail.com',
@@ -32,7 +32,7 @@ describe("Tetes da rota de Login", () => {
       phone: '986668422'
     }];
 
-    User.create(users, function(err, users) {
+    User.create(users, (err, users) => {
       done();
     });
   });
@@ -41,14 +41,14 @@ describe("Tetes da rota de Login", () => {
     clearDB(done);
   });
 
-  it("Login con usuario valido", function(done) {
+  it("Login con usuario valido", (done) => {
     chai.request(url)
       .post("/login")
       .send({
         "email": "ygor.gsan@gmail.com",
         "password": "123456789"
       })
-      .end(function(err, res) {
+      .end((err, res) => {
         expect(err).to.not.be.an('error');
         expect(res).to.be.an('object');
         res.body.should.have.property('success');
@@ -74,14 +74,14 @@ describe("Tetes da rota de Login", () => {
       });
   });
 
-  it("Login com usuario invalido", function(done) {
+  it("Login com usuario invalido", (done) => {
     chai.request(url)
       .post("/login")
       .send({
         "email": "diego.augusto@gmail.com",
         "password": "123456789"
       })
-      .end(function(err, res) {
+      .end((err, res) => {
         expect(err).to.not.be.an('error');
         expect(res).to.be.an('object');
         res.body.should.have.property('success');
