@@ -28,39 +28,4 @@ var db = mongoose.connection;
 
 db.on('error', console.error.bind(console, 'Erro ao conectar no banco de dados'));
 
-db.once('open', function() {
-
-  /*Esquema do Json das promoçoes*/
-  var promotionsSchema = mongoose.Schema({
-    company: {
-      name: String,
-      subtitle: String
-    },
-    productName: String,
-    price: {
-      unit: String,
-      actual: Number,
-      old: Number
-    },
-    startDate: Date,
-    endDate: Date,
-    reason: String,
-    shelf_life: Date,
-    conservation: String,
-    images: [String],
-    evaluates: {
-      user_likes: [mongoose.Schema.Types.ObjectId],
-      comments: [{
-        _user: {
-          type: mongoose.Schema.Types.ObjectId,
-          ref: 'Users'
-        },
-        date: Date,
-        text: String
-      }]
-    }
-  });
-
-  exports.promotions = mongoose.model('Promotions', promotionsSchema);
-
-});
+db.once('open', console.error.bind(console, 'Conexao com banco de dados aberta'));

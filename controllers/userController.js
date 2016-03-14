@@ -1,5 +1,3 @@
-var db = require('../config/db_config.js');
-
 var User = require('../models/user.js')
 
 exports.list = function(resolve, reject) {
@@ -56,6 +54,26 @@ exports.save = function(name, email, password, phone, resolve, reject) {
     });
 };
 
+exports.setPassord = function(email, password, resolve, reject) {
+    User.update({
+        email: email
+    }, {
+        $set: {
+            password: password
+        }
+    }, function(error) {
+
+        if (error) {
+            reject({
+                error: 'Não foi possível atualizar o usuário'
+            });
+        } else {
+            resolve({
+                sucess: 'Senha atualizada com sucesso'
+            });
+        }
+    });
+};
 /*id eh necessario?*/
 exports.update = function(name, email, password, phone, resolve, reject) {
 
@@ -119,4 +137,4 @@ this.verificaEmail = function(email) {
     }, function() {
         return false;
     });
-}
+};

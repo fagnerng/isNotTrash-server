@@ -5,18 +5,7 @@ var userController = require('../controllers/userController.js');
 var validator = require('validator');
 var url = require('url');
 
-/*Rota que retorna todos os usuários*/
-/*router.get('/', function(req, res) {
-    userController.list(
-        function(resp) {
-            res.send(resp, 200);
-        }, function(exception){
-            res.send(exception, 404);
-        }
-    );
-});*/
-
-/*Rota que retorna o usuário específico*/
+/*Rota que retorna o usuário específico ou todos os usuários */
 router.get('/', function(req, res) {
 
     var query = req.query;
@@ -49,12 +38,10 @@ router.post('/', function(req, res) {
 /*Rota que atualiza um usuário*/
 router.put('/', function(req, res) {
 
-    var json = url.parse(req.url, true).query;
-
-    var name = req.body.name;
-    var email = req.body.email;;
-    var password = req.body.password;
-    var phone = req.body.phone;
+    var name = validator.trim(validator.escape(req.body.name));
+    var email = validator.trim(validator.escape(req.body.email));;
+    var password = validator.trim(validator.escape(req.body.password));
+    var phone = validator.trim(validator.escape(req.body.phone));
 
     userController.update(name, email, password, phone,
         function(resp) {
