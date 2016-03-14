@@ -37,15 +37,16 @@ router.post('/newPromotions', function(req, res){
 
     var first = validator.trim(validator.escape(req.body.first));
     var user_id = validator.trim(validator.escape(req.userInformations._id));
+    var limit = validator.trim(validator.escape(req.body.limit));
 
     if(!first){
-        promotionController.all(user_id,
+        promotionController.all(user_id, limit,
             function(resp) {
                 res.json(resp);
             }, function(exception){}
         );
     } else {
-        promotionController.listNewPromotions(first, user_id,
+        promotionController.listNewPromotions(first, user_id, limit,
             function(resp) {
                 res.json(resp);
             }, function(exception){}
