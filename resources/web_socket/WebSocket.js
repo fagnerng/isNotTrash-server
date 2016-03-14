@@ -7,7 +7,7 @@ var io = socket_io();
 var promotionController = require('../../controllers/promotionController.js');
 var validator = require('validator');
 var jwt = require('jsonwebtoken');
-var config = require('../../config/config.js');
+var config = require('../../config/config');
 
 const CONNECTION = 'connection',
       UNAUTHORIZED = 'unauthorized',

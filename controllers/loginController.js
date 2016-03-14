@@ -1,5 +1,5 @@
 var jwt = require('jsonwebtoken');
-var config = require('../config/config.js');
+var config = require('../config/config');
 var User = require('../models/user.js')
 
 exports.login = function(email, password, callback) {

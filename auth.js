@@ -1,5 +1,5 @@
 var jwt = require('jsonwebtoken');
-var config = require('./config/config.js');
+var config = require('./config/config');
 
 function auth(req, res, next) {
 

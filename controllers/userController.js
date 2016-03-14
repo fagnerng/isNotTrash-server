@@ -1,7 +1,7 @@
 var User = require('../models/user.js')
 
-exports.list = function(resolve, reject) {
-    User.find({}, function(error, users) {
+exports.list = (resolve, reject) => {
+    User.find({}, (error, users) => {
         if (error) {
             reject({
                 error: 'Não foi possivel retornar os usuários'
@@ -12,10 +12,9 @@ exports.list = function(resolve, reject) {
     });
 };
 
-/*id ou name*/
-exports.user = function(query, resolve, reject) {
+exports.user = (query, resolve, reject) => {
 
-    User.find(query, function(error, user) {
+    User.find(query, (error, user) => {
         if (error) {
             reject({
                 error: 'Não foi possivel retornar o usuário'
@@ -26,15 +25,15 @@ exports.user = function(query, resolve, reject) {
     });
 };
 
-exports.save = function(name, email, password, phone, resolve, reject) {
-    this.verificaEmail(email).then(function(permicao) {
+exports.save = (name, email, password, phone, resolve, reject) => {
+    this.verificaEmail(email).then((permicao) => {
         if (permicao) {
             new User({
                 'name': name,
                 'email': email,
                 'password': password,
                 'phone': phone
-            }).save(function(error, user) {
+            }).save((error, user) => {
                 if (error) {
                     reject({
                         error: 'Não foi possível salvar o usuário'
@@ -54,14 +53,14 @@ exports.save = function(name, email, password, phone, resolve, reject) {
     });
 };
 
-exports.setPassord = function(email, password, resolve, reject) {
+exports.setPassord = (email, password, resolve, reject) => {
     User.update({
         email: email
     }, {
         $set: {
             password: password
         }
-    }, function(error) {
+    }, (error) => {
 
         if (error) {
             reject({
@@ -74,8 +73,9 @@ exports.setPassord = function(email, password, resolve, reject) {
         }
     });
 };
+
 /*id eh necessario?*/
-exports.update = function(name, email, password, phone, resolve, reject) {
+exports.update = (name, email, password, phone, resolve, reject) => {
 
     var selection = {
         "email": email
@@ -92,7 +92,7 @@ exports.update = function(name, email, password, phone, resolve, reject) {
         "new": true
     };
 
-    User.findOneAndUpdate(selection, update, option, function(error, user) {
+    User.findOneAndUpdate(selection, update, option, (error, user) => {
         if (error) {
             reject({
                 error: 'Não foi possível atualizar o usuário'
@@ -107,14 +107,14 @@ exports.update = function(name, email, password, phone, resolve, reject) {
 };
 
 /*id ou name*/
-exports.delete = function(id, resolve, reject) {
-    User.findById(id, function(error, user) {
+exports.delete = (id, resolve, reject) => {
+    User.findById(id, (error, user) => {
         if (error) {
             reject({
                 error: 'Não foi possível retornar o usuário'
             });
         } else {
-            user.remove(function(error) {
+            user.remove((error) => {
                 if (!error) {
                     resolve({
                         response: 'Usuário excluído com sucesso'
@@ -125,16 +125,16 @@ exports.delete = function(id, resolve, reject) {
     });
 };
 
-this.verificaEmail = function(email) {
+this.verificaEmail = (email) => {
     return User.find({
         'email': email
-    }).then(function(existUser) {
+    }).then((existUser) => {
         if (existUser.length === 0) {
             return true;
         } else {
             return false;
         }
-    }, function() {
+    }, () => {
         return false;
     });
 };

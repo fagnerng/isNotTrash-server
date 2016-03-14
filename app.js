@@ -14,3 +14,5 @@ app.use('/users', usersRoutes);
 //Rotas com auth
 app.use(require('./auth'));
 app.use('/promotions', promotionRoutes);
+
+exports = module.exports = app;
