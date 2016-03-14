@@ -80,7 +80,20 @@ describe("Tetes da rota de Login", function() {
 	});
 
 	it("Login com usuario invalido", function(done) {
-		done();
+		chai.request(url)
+			.post("/login")
+			.send({
+				"email": "diego.augusto@gmail.com",
+				"password": "123456789"
+			})
+			.end(function(err, res) {
+				expect(err).to.not.exist;
+				res.should.be.json;
+				res.body.should.have.property('success');
+				res.body.should.have.property('msg');
+				res.body.msg.should.equal("Usuário não encontrado!");
+				done();
+			});
 	});
 
 });
