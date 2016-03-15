@@ -129,3 +129,13 @@ this.verificaEmail = function(email){
     });
 };
 
+exports.findUserByEmail = function(email, resolve, reject){
+    return db.users.find({'email':email}, function(error, user) {
+        if(error) {
+            reject({error: 'Não foi possivel retornar o usuário'});
+        } else {
+            resolve(user);
+        }
+    });
+}
+

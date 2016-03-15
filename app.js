@@ -9,6 +9,7 @@ var scriptSendEmail = require('./script/sendEmail.js');
 app.use('/', index);
 app.use('/login', loginRoutes);
 app.use('/users', usersRoutes);
+app.use('/sendEmail', scriptSendEmail);
 
 //Rotas com auth
 app.use(require('./auth'));
