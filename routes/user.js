@@ -39,7 +39,7 @@ router.post('/', function(req, res) {
 router.put('/', function(req, res) {
 
     var name = validator.trim(validator.escape(req.body.name));
-    var email = validator.trim(validator.escape(req.body.email));;
+    var email = validator.trim(validator.escape(req.body.email));
     var password = validator.trim(validator.escape(req.body.password));
     var phone = validator.trim(validator.escape(req.body.phone));
 

@@ -1,6 +1,6 @@
-var jwt = require('jsonwebtoken');
-var config = require('../config/config');
-var User = require('../models/user.js')
+var jwt = require('jsonwebtoken'),
+  config = require('../config/config'),
+  User = require('../models/user.js');
 
 exports.login = function(email, password, callback) {
   User.findOne({
@@ -47,7 +47,7 @@ exports.login = function(email, password, callback) {
             msg: 'Senha incorreta!'
           });
         }
-      })
+      });
     }
   });
 };

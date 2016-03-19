@@ -1,4 +1,4 @@
-var User = require('../models/user.js')
+var User = require('../models/user.js');
 
 exports.list = (resolve, reject) => {
     User.find({}, (error, users) => {
@@ -86,7 +86,7 @@ exports.update = (name, email, password, phone, resolve, reject) => {
         "email": email,
         "password": password,
         "phone": phone
-    }
+    };
 
     var option = {
         "new": true
