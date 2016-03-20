@@ -1,8 +1,9 @@
-var express =  require('express');
+var express = require('express');
 var logger = require('morgan');
-var bodyParser =  require('body-parser');
+var bodyParser = require('body-parser');
 
 var app = module.exports = express();
+
 var server = require('http').createServer(app);
 var io = require('../resources/web_socket/WebSocket.js');
 
@@ -10,13 +11,13 @@ var io = require('../resources/web_socket/WebSocket.js');
 var ip = process.env.IP || 'localhost';
 var port = process.env.PORT || 1337;
 
-server.listen(port, function() {
+server.listen(port, () => {
 	console.log('App is running on http://' + ip + ':' + port);
 });
 
 io.attach(server);
 
-var allowCors = function(req, res, next){
+var allowCors = (req, res, next) => {
 	res.header('Access-Control-Allow-Origin', 'http://localhost:8100');
 	res.header('Access-Control-Allow-Methods', 'GET, PUT, POST, DELETE');
 	res.header('Access-Control-Allow-Headers', "Content-Type");
@@ -27,9 +28,11 @@ var allowCors = function(req, res, next){
 
 app.use(allowCors);
 
-app.use(logger('dev'));
+if (process.env.NODE_ENV === 'dev') {
+	app.use(logger('dev'));
+}
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
-   extended: true
+	extended: true
 }));

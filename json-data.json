@@ -1,5 +1,4 @@
-[
-  {
+[{
     "name": "Carmen",
     "company": "PROXSOFT",
     "value": "$809.62",
@@ -12,8 +11,7 @@
     "conservation": "Nisi enim nisi irure consectetur enim. Ea nulla nostrud dolore cupidatat ut Lorem consequat velit veniam. In qui esse ad sit anim enim Lorem Lorem laborum aliquip elit cillum officia. Proident ea cupidatat ad duis. Veniam anim do do enim cupidatat et aute aliqua nostrud nostrud dolor est sint sit. Lorem deserunt consequat dolor tempor magna laborum culpa. Consectetur quis nostrud reprehenderit dolor quis magna est exercitation tempor ex ut quis elit duis.\r\n",
     "image": "[http://www.frugaltravelguy.com/wp-content/uploads/2014/10/sale-480x280.jpg]",
     "likes": 817
-  },
-  {
+}, {
     "name": "Bowers",
     "company": "XSPORTS",
     "value": "$3,295.99",
@@ -26,8 +24,7 @@
     "conservation": "Mollit magna ad et cupidatat aliquip aliqua cillum esse proident sunt ea eu Lorem. Ex excepteur voluptate mollit cupidatat laboris pariatur quis labore. Id ad laborum consectetur irure veniam irure voluptate culpa adipisicing ipsum incididunt in reprehenderit. Labore id ipsum tempor non est labore id aliqua consequat do irure. Laborum incididunt ut pariatur Lorem labore cupidatat. Sunt veniam velit eiusmod eu Lorem irure tempor voluptate ut non.\r\n",
     "image": "[http://www.frugaltravelguy.com/wp-content/uploads/2014/10/sale-480x280.jpg]",
     "likes": 986
-  },
-  {
+}, {
     "name": "Tillman",
     "company": "KOFFEE",
     "value": "$3,121.98",
@@ -40,8 +37,7 @@
     "conservation": "Ut dolore deserunt eu in magna voluptate reprehenderit minim officia ea eiusmod. Qui occaecat veniam cillum minim culpa officia veniam duis do veniam pariatur cillum laborum non. Ipsum cupidatat est pariatur est commodo do veniam amet quis.\r\n",
     "image": "[http://www.frugaltravelguy.com/wp-content/uploads/2014/10/sale-480x280.jpg]",
     "likes": 595
-  },
-  {
+}, {
     "name": "Oneal",
     "company": "TRANSLINK",
     "value": "$139.66",
@@ -54,8 +50,7 @@
     "conservation": "Elit est quis cillum ipsum sint mollit irure sunt est. Minim Lorem voluptate reprehenderit consectetur esse sint amet labore elit eu aliqua sit tempor. Sint ut eu dolor officia. Officia consectetur incididunt velit proident amet consequat. Incididunt occaecat incididunt voluptate non dolore velit Lorem et aliqua. Elit ea magna dolore consectetur quis ex occaecat sunt non voluptate nisi.\r\n",
     "image": "[http://www.frugaltravelguy.com/wp-content/uploads/2014/10/sale-480x280.jpg]",
     "likes": 653
-  },
-  {
+}, {
     "name": "Maritza",
     "company": "EZENT",
     "value": "$177.48",
@@ -68,13 +63,11 @@
     "conservation": "Quis pariatur pariatur pariatur enim non laboris excepteur aliquip exercitation Lorem ut quis ea mollit. Nulla esse duis consectetur consectetur fugiat ullamco ipsum laborum minim nostrud ipsum quis. Culpa incididunt labore culpa ad dolore. Enim ipsum nisi sit adipisicing mollit culpa do mollit.\r\n",
     "image": "[http://www.frugaltravelguy.com/wp-content/uploads/2014/10/sale-480x280.jpg]",
     "likes": 399
-  }
-]
+}]
 
 //----------------
 
-[
-  {
+[{
     "name": "Ashley",
     "company": "HOTCAKES",
     "value": "$3,006.08",
@@ -87,8 +80,7 @@
     "conservation": "Aute deserunt reprehenderit qui nostrud anim. Ipsum velit aliquip dolore ea sint. Commodo dolore veniam consectetur id et deserunt sunt. Aliqua anim nulla sint esse irure sit mollit proident exercitation culpa proident.\r\n",
     "image": "[http://www.frugaltravelguy.com/wp-content/uploads/2014/10/sale-480x280.jpg]",
     "likes": 679
-  },
-  {
+}, {
     "name": "Caroline",
     "company": "PROXSOFT",
     "value": "$211.64",
@@ -101,8 +93,7 @@
     "conservation": "Elit sit qui dolor officia. Lorem et est laboris ea laboris do voluptate consectetur. Ipsum pariatur enim laboris enim.\r\n",
     "image": "[http://www.frugaltravelguy.com/wp-content/uploads/2014/10/sale-480x280.jpg]",
     "likes": 101
-  },
-  {
+}, {
     "name": "Joni",
     "company": "ACIUM",
     "value": "$3,880.10",
@@ -115,8 +106,7 @@
     "conservation": "Dolore adipisicing pariatur aliquip ea occaecat consequat sit elit laboris voluptate quis ut consectetur. Culpa proident eiusmod nulla cillum cupidatat aliquip in id velit fugiat sint quis nostrud. Tempor deserunt consectetur veniam excepteur qui reprehenderit.\r\n",
     "image": "[http://www.frugaltravelguy.com/wp-content/uploads/2014/10/sale-480x280.jpg]",
     "likes": 340
-  },
-  {
+}, {
     "name": "Parrish",
     "company": "ISIS",
     "value": "$2,093.99",
@@ -129,8 +119,7 @@
     "conservation": "Officia excepteur quis labore excepteur magna veniam id sit eiusmod sit aute quis. Commodo nostrud Lorem proident tempor laborum est. Nostrud elit magna esse sit qui non qui adipisicing nisi.\r\n",
     "image": "[http://www.frugaltravelguy.com/wp-content/uploads/2014/10/sale-480x280.jpg]",
     "likes": 272
-  },
-  {
+}, {
     "name": "Nixon",
     "company": "EXOSWITCH",
     "value": "$1,373.63",
@@ -143,5 +132,4 @@
     "conservation": "Aliqua tempor pariatur nostrud ex amet voluptate commodo non incididunt occaecat culpa ex. Dolore ipsum cupidatat amet cupidatat duis commodo incididunt fugiat proident. Sit exercitation et Lorem dolore irure excepteur eu fugiat amet sit deserunt non. Dolor voluptate velit amet sint ea fugiat sit pariatur sit in. Lorem ex amet do dolor eiusmod deserunt ex dolor incididunt ullamco laborum pariatur magna eiusmod. Excepteur consequat reprehenderit quis ipsum eu laboris. Incididunt consectetur consequat elit enim qui exercitation.\r\n",
     "image": "[http://www.frugaltravelguy.com/wp-content/uploads/2014/10/sale-480x280.jpg]",
     "likes": 870
-  }
-]
+}]
