@@ -3,11 +3,10 @@ var Schema = mongoose.Schema;
 
 var establishmentSchema = new Schema({
   name: {
-    type: String,
-    unique: true
+    type: String
   },
   city: {
-    type: String,
+    type: String
   }
 });
 

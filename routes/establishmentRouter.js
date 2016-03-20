@@ -5,6 +5,8 @@ var express = require('express'),
 
 router.get('/', (req, res) => {
 
+  var query = req.query;
+
   establishmentController.query(query, (resp) => {
     res.json(resp.content);
   });

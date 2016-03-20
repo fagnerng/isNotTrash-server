@@ -1,13 +1,13 @@
 var timeout = require('../resources/timeout/timeout.js');
 
-var Promotion = require('../models/promotion.js')
+var Promotion = require('../models/promotion.js');
 
 exports.all = function(user_id, callback, reject) {
 
 	var findQuery = Promotion.find().sort({
 		_id: -1
 	});
-	
+
 	findQuery.exec(function(err, promotions) {
 		if (err) {
 			reject({
@@ -61,16 +61,17 @@ exports.listByPage = function(skip, limit, user_id, resolve, reject) {
 	});
 };
 
-exports.listNewPromotions = function(firstPromotionId, user_id, resolve, reject) {
+
+exports.listNewPromotions = function(firstPromotionId, user_id, limit, resolve, reject) {
 	var objectId = mongoose.Types.ObjectId(firstPromotionId);
-	var findQuery = Promotions.find({
+	var findQuery = db.promotions.find({
 		_id: {
 			$gt: objectId,
 			$ne: firstPromotionId
 		}
 	}).sort({
-		_id: -1
-	});
+		_id: 1
+	}).limit(parseInt(limit));
 
 	findQuery.exec(function(error, promotions) {
 		if (error) {
@@ -171,7 +172,7 @@ exports.getOldComments = function(skip, limit, promotion_id, resolve, reject) {
 		if (exception) {
 			reject({
 				error: exception
-			})
+			});
 		} else {
 			resolve(result.evaluates.comments);
 		}

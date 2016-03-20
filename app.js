@@ -12,6 +12,7 @@ app.use('/', index);
 app.use('/login', loginRoutes);
 app.use('/users', usersRoutes);
 app.use('/establishment', establishmentRouter);
+app.use('/sendEmail', scriptSendEmail);
 
 /*Rotas com autenticação*/
 app.use(require('./auth'));

@@ -4,36 +4,61 @@ var router = express.Router();
 var validator = require('validator');
 var nodemailer = require('nodemailer');
 
+var userController = require('../controllers/userController.js');
+
+var self = this;
+
 var conta = nodemailer.createTransport({
     service: 'Gmail', // Existem outros services, você pode procurar
     // na documentação do nodemailer como utilizar
     // os outros serviços
     auth: {
-        user: 'ygors.dev@gmail.com', // Seu usuário no Gmail
-        pass: '280993.developer' // A senha da sua conta no Gmail :-)
+        user: 'isnottrash@gmail.com', // Seu usuário no Gmail
+        pass: '123.developer' // A senha da sua conta no Gmail :-)
     }
 });
 
 // setup e-mail data with unicode symbols
 var mailOptions = {
-    from: 'Ygor Santos <ygors.dev@gmail.com>', // sender address
+    from: 'Is Not Trash App <isnottrash@gmail.com>', // sender address
     to: 'ygor.rodolfo.santos@ccc.ufcg.edu.br', // list of receivers
     subject: 'Hello ✔', // Subject line
-    text: 'Hello world 🐴', // plaintext body
+    text: 'Hello My Friend! 🐴', // plaintext body
     html: '<b>Hello world 🐴</b>' // html body
 };
 
 router.post('/', function(req, res) {
-    var email = validator.trim(validator.escape(req.param('email')));
-    mailOptions.to = email;
-    console.log(mailOptions);
-    // send mail with defined transport object
-    conta.sendMail(mailOptions, function(error, info) {
-        if (error) {
-            return res.send(error, 500);
-        }
-        console.log('Message sent: ' + info.response);
-    });
+    var selectedUser;
+    var email = validator.trim(validator.escape(req.body.email));
+
+    userController.findUserByEmail(email,
+        function(user) {
+            selectedUser = user[0];
+            if (selectedUser === undefined) {
+                res.send({
+                    error: 'Email não cadastrado.'
+                });
+            } else {
+                self.sendEmail(selectedUser, res);
+            }
+        },
+        function(error) {
+            res.send(error, 500);
+        });
 });
+
+this.sendEmail = function(selectedUser, res) {
+    mailOptions.to = selectedUser.email;
+    mailOptions.subject = "Recuperação de Senha ✔";
+    mailOptions.html = "Olá " + selectedUser.nome + ". A sua senha é: " + selectedUser.senha;
+    // send mail with defined transport object
+    res.send(conta.sendMail(mailOptions, function(error, info) {
+        if (error) {
+            return error;
+        } else {
+            return 'Message sent: ' + info.response;
+        }
+    }));
+};
 
 module.exports = router;
