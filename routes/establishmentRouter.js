@@ -3,17 +3,21 @@ var express = require('express'),
   establishmentController = require('../controllers/establishmentController.js'),
   validator = require('validator');
 
+router.get('/', (req, res) => {
+
+  establishmentController.query(query, (resp) => {
+    res.json(resp.content);
+  });
+});
+
+
 router.post('/', function(req, res) {
 
   var name = req.body.name;
   var city = req.body.city;
 
-  console.log("Router:");
-  console.log("name: " + name);
-  console.log("city: " + city);
-
-  establishmentController.create(name, city, function(resp) {
-    res.status(resp.status).send(resp.msg);
+  establishmentController.create(name, city, (resp) => {
+    res.json(resp.content);
   });
 });
 
