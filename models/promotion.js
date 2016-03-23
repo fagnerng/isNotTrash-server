@@ -2,9 +2,9 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var promotionsSchema = new Schema({
-	company: {
-		name: String,
-		subtitle: String
+	_company: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'Establishment'
 	},
 	productName: String,
 	price: {
@@ -23,7 +23,7 @@ var promotionsSchema = new Schema({
 		comments: [{
 			_user: {
 				type: mongoose.Schema.Types.ObjectId,
-				ref: 'Users'
+				ref: 'User'
 			},
 			date: Date,
 			text: String
@@ -31,4 +31,4 @@ var promotionsSchema = new Schema({
 	}
 });
 
-module.exports = mongoose.model('Promotions', promotionsSchema);
+module.exports = mongoose.model('Promotion', promotionsSchema);

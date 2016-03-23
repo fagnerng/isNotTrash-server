@@ -43,12 +43,13 @@ exports.all = function(user_id, callback, reject) {
 };*/
 
 exports.listByPage = function(skip, limit, user_id, resolve, reject) {
-	var promotions = Promotion.find().
-	sort({
+	var promotions = Promotion.find()
+	.populate('_company')
+	.sort({
 		_id: -1
-	}).
-	skip(skip).
-	limit(limit);
+	})
+	.skip(skip)
+	.limit(limit);
 
 	promotions.exec(function(error, promotions) {
 		if (error) {
@@ -64,12 +65,13 @@ exports.listByPage = function(skip, limit, user_id, resolve, reject) {
 
 exports.listNewPromotions = function(firstPromotionId, user_id, limit, resolve, reject) {
 	var objectId = mongoose.Types.ObjectId(firstPromotionId);
-	var findQuery = db.promotions.find({
+	var findQuery = db.Promotion.find({
 		_id: {
 			$gt: objectId,
 			$ne: firstPromotionId
 		}
-	}).sort({
+	}).populate('_company')
+	.sort({
 		_id: 1
 	}).limit(parseInt(limit));
 
@@ -87,7 +89,7 @@ exports.listNewPromotions = function(firstPromotionId, user_id, limit, resolve, 
 
 exports.addLike = function(params, resolve, reject) {
 	var id = params.user_informations._id;
-	var updateQuery = Promotions.findOneAndUpdate({
+	var updateQuery = Promotion.findOneAndUpdate({
 		_id: params.promotion_id
 	}, {
 		$push: {
@@ -111,7 +113,7 @@ exports.addLike = function(params, resolve, reject) {
 
 exports.removeLike = function(params, resolve, reject) {
 	var user_id = params.user_informations._id;
-	var updateQuery = Promotions.findOneAndUpdate({
+	var updateQuery = Promotion.findOneAndUpdate({
 		_id: params.promotion_id
 	}, {
 		$pull: {
@@ -134,7 +136,7 @@ exports.removeLike = function(params, resolve, reject) {
 
 exports.addComment = function(promotion_id, comment, resolve, reject) {
 	//refatorar usando promises
-	var updateQuery = Promotions.update({
+	var updateQuery = Promotion.update({
 		_id: promotion_id
 	}, {
 		$push: {
@@ -161,7 +163,7 @@ exports.addComment = function(promotion_id, comment, resolve, reject) {
 };
 
 exports.getOldComments = function(skip, limit, promotion_id, resolve, reject) {
-	Promotions.findOne({
+	Promotion.findOne({
 		_id: promotion_id
 	}, {
 		'evaluates.comments': {
@@ -227,7 +229,7 @@ exports.getOldComments = function(skip, limit, promotion_id, resolve, reject) {
 
 exports.getNewComments = function(promotion_id, commentDate, resolve, reject) {
 	var objectId = mongoose.Types.ObjectId(promotion_id);
-	var queryFind = Promotions.findOne({
+	var queryFind = Promotion.findOne({
 		_id: objectId
 	});
 	queryFind.populate('evaluates.comments._user', '-password').exec(function(error, result) {
@@ -247,7 +249,7 @@ exports.getNewComments = function(promotion_id, commentDate, resolve, reject) {
 };
 
 exports.addPromotion = function(json, resolve, reject) {
-	var insertQuery = Promotions.insert(json);
+	var insertQuery = Promotion.insert(json);
 	insertQuery.exec(function(error, response) {
 		if (error) {
 			reject(error);
